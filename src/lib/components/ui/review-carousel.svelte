@@ -36,19 +36,10 @@
   };
 
   const buildReviewQueue = (input: Review[]) => {
-    const sanitized = input.filter((item) => item.name && item.text && item.rating > 0);
+    const sanitized = input.filter((item) => item.name && item.text && item.rating === 5);
     if (sanitized.length === 0) return [];
 
-    if (sanitized.length >= MAX_QUEUE_SIZE) {
-      return sanitized.slice(0, MAX_QUEUE_SIZE);
-    }
-
-    const queue = [...sanitized];
-    for (let i = 0; queue.length < MAX_QUEUE_SIZE; i += 1) {
-      queue.push(sanitized[i % sanitized.length]);
-    }
-
-    return queue;
+    return sanitized.slice(0, MAX_QUEUE_SIZE);
   };
 
   const getVisibleCount = () => {

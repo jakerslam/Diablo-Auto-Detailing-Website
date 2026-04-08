@@ -52,7 +52,8 @@
       })
       .filter((review) => review.name && review.text && review.rating > 0);
 
-    return parsed.slice(0, 30);
+    const fiveStarReviews = parsed.filter((review) => review.rating === 5);
+    return fiveStarReviews.slice(0, 30);
   };
 
   onMount(async () => {
