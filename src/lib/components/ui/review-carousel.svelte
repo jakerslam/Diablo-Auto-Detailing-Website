@@ -82,8 +82,8 @@
     <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s;`}>
       {#each loopReviews as review}
         <article class="reviews-card flex-shrink-0 p-2" style={`width: ${cardWidth}`}>
-          <div class="flex aspect-[10/7] h-full min-h-0 flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <p class="text-sm leading-relaxed text-white/90">“{review.text}”</p>
+          <div class="flex aspect-square h-full min-h-0 flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <p class="review-text text-sm leading-relaxed text-white/90">“{review.text}”</p>
             <div>
               <p class="text-sm font-semibold text-white/95">{formatReviewerName(review.name)}</p>
               <p class="mt-1 text-xs font-semibold text-white/80">
@@ -113,5 +113,13 @@
     to {
       transform: translateX(-50%);
     }
+  }
+
+  .review-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
