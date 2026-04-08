@@ -10,10 +10,9 @@
     ...emptyLeadForm
   };
 
-  let formMessage = '';
-  let isSubmitting = false;
-  let submitted = false;
-  let submitError = false;
+  const ghlFormEndpoint =
+    typeof import.meta !== 'undefined' ? import.meta.env.PUBLIC_GHL_FORM_ENDPOINT || '' : '';
+  const ghlFormConfigured = Boolean(ghlFormEndpoint && !ghlFormEndpoint.includes('example.com'));
 
   const planIds = servicePlans.map((plan) => plan.id);
 
@@ -46,91 +45,9 @@
     trackEvent('quote_intent', { source: 'button_click', label });
   }
 
-  function getMetadata() {
-    if (typeof window === 'undefined') {
-      return {
-        pageUrl: '',
-        utmSource: '',
-        utmMedium: '',
-        utmCampaign: ''
-      };
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    return {
-      pageUrl: window.location.href,
-      utmSource: params.get('utm_source') ?? '',
-      utmMedium: params.get('utm_medium') ?? '',
-      utmCampaign: params.get('utm_campaign') ?? ''
-    };
-  }
-
-  async function submitForm(event: SubmitEvent) {
-    event.preventDefault();
-    isSubmitting = true;
-    formMessage = '';
-    submitError = false;
-    const metadata = getMetadata();
-
-    const selectedPlan = servicePlans.find((plan) => plan.id === form.plan);
-    const payload = {
-      ...form,
-      selectedPlan: selectedPlan?.name ?? 'one-time',
-      timestamp: new Date().toISOString(),
-      source: 'Diablo Auto Detailing Website',
-      ...metadata
-    };
-
-    const endpoint =
-      typeof import.meta !== 'undefined'
-        ? import.meta.env.PUBLIC_GHL_FORM_ENDPOINT || 'https://example.com/go-high-level-endpoint'
-        : '';
-
-    if (!endpoint || endpoint.includes('example.com')) {
-      formMessage = `Thanks ${form.firstName}! We captured your request. Our team will text you to confirm a ${form.plan} detail in your area.`;
-      onQuoteIntent('form_submitted_placeholder');
-      submitted = true;
-      isSubmitting = false;
-      return;
-    }
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response failed');
-      }
-
-      onQuoteIntent('form_submitted_live');
-      submitted = true;
-      formMessage = `Thanks ${form.firstName}! Your quote request is in. We will follow up shortly.`;
-    } catch (error) {
-      submitError = true;
-      formMessage = 'We had trouble sending your request. Please call (510) 631-1230 to complete your quote.';
-      console.error(error);
-    } finally {
-      isSubmitting = false;
-    }
-  }
-
   function setPlan(plan: PlanType) {
     form.plan = plan;
     onQuoteIntent(`plan_selected_${plan}`);
-  }
-
-  function resetForm() {
-    form = {
-      ...emptyLeadForm
-    };
-    submitted = false;
-    formMessage = '';
-    submitError = false;
   }
 
   const phone = '(510) 631-1230';
@@ -282,156 +199,185 @@
       <h2 class="text-2xl font-semibold">Request a quote</h2>
       <p class="mt-2 text-white/75">All pricing requests route to quote form review before any booking confirmation.</p>
 
-      {#if submitted}
-        <div class="mt-6 rounded-2xl border border-white/20 bg-white/5 p-4">
-          <p class="text-lg font-semibold">{submitError ? 'Could not submit' : 'Quote request captured'}</p>
-          <p class="mt-1 text-sm text-white/80">{formMessage}</p>
-          <button class="mt-4 btn-secondary" type="button" on:click={resetForm}>Submit another request</button>
-        </div>
-      {:else}
-        <form class="mt-6 grid gap-4 md:grid-cols-2" on:submit={submitForm}>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>First name *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.firstName}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Last name *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.lastName}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Phone *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              type="tel"
-              bind:value={form.phone}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Email</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              type="email"
-              bind:value={form.email}
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>City or ZIP *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.city}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>ZIP *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.zip}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Vehicle year *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.vehicleYear}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Vehicle make *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.vehicleMake}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Vehicle model *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.vehicleModel}
-              required
-            />
-          </label>
-          <label class="flex flex-col gap-1 text-sm">
-            <span>Preferred date window *</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.preferredWindow}
-              required
-            />
-          </label>
+      <form
+        class="mt-6 grid gap-4 md:grid-cols-2"
+        action={ghlFormConfigured ? ghlFormEndpoint : undefined}
+        method={ghlFormConfigured ? 'POST' : undefined}
+      >
+        {#if !ghlFormConfigured}
+          <p class="md:col-span-2 text-sm text-amber-200">
+            Form endpoint is not configured yet. Set PUBLIC_GHL_FORM_ENDPOINT in repository secret/env to capture this submission.
+          </p>
+        {/if}
 
-          <label class="flex flex-col gap-1 text-sm md:col-span-2">
-            <span>Plan *</span>
-            <select class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2" bind:value={form.plan}>
-              {#each planIds as planId}
-                <option value={planId}>{planId}</option>
-              {/each}
-            </select>
-          </label>
+        <input type="hidden" name="source" value="Diablo Auto Detailing Website" />
+        <input type="hidden" name="selected_plan" value={form.plan} />
 
-          <label class="flex flex-col gap-1 text-sm md:col-span-2">
-            <span>Message</span>
-            <textarea
-              rows="3"
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.message}
-              placeholder="Anything specific we should know?"
-            ></textarea>
-          </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>First name *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="first_name"
+            bind:value={form.firstName}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Last name *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="last_name"
+            bind:value={form.lastName}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Phone *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="phone"
+            type="tel"
+            bind:value={form.phone}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Email</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="email"
+            type="email"
+            bind:value={form.email}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>City or ZIP *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="city_or_zip"
+            bind:value={form.city}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>ZIP *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="zip"
+            bind:value={form.zip}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Vehicle year *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="vehicle_year"
+            bind:value={form.vehicleYear}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Vehicle make *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="vehicle_make"
+            bind:value={form.vehicleMake}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Vehicle model *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="vehicle_model"
+            bind:value={form.vehicleModel}
+            required
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span>Preferred date window *</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="preferred_window"
+            bind:value={form.preferredWindow}
+            required
+          />
+        </label>
 
-          <label class="flex flex-col gap-2 text-sm md:col-span-2">
-            <span>Best time to contact</span>
-            <input
-              class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
-              bind:value={form.bestContactTime}
-              placeholder="Any preferences"
-            />
-          </label>
-
-          <fieldset class="md:col-span-2">
-            <legend class="mb-2 text-sm">What's included in your quote *</legend>
-            <div class="grid gap-2 text-sm sm:grid-cols-2">
-              <label class="inline-flex items-center gap-2">
-                <input type="checkbox" bind:checked={form.includeInteriorDetailing} /> Interior detailing + carpet shampooing
-              </label>
-              <label class="inline-flex items-center gap-2">
-                <input type="checkbox" bind:checked={form.includeWheelCleaning} /> Full wheel cleaning
-              </label>
-              <label class="inline-flex items-center gap-2">
-                <input type="checkbox" bind:checked={form.includeInteriorVacuum} /> Full interior vacuum + glass clean
-              </label>
-              <label class="inline-flex items-center gap-2">
-                <input type="checkbox" bind:checked={form.includeCeramicWax} /> Complimentary ceramic wax
-              </label>
-            </div>
-          </fieldset>
-
-          <button
-            class="col-span-1 rounded-full bg-glow-500 px-5 py-3 font-semibold text-slate-900 disabled:opacity-50 md:col-span-2"
-            type="submit"
-            disabled={isSubmitting}
-            on:click={() => onQuoteIntent('submit_click')}
+        <label class="flex flex-col gap-1 text-sm md:col-span-2">
+          <span>Plan *</span>
+          <select
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="plan"
+            bind:value={form.plan}
           >
-            {isSubmitting ? 'Sending...' : 'Request Quote'}
-          </button>
-        </form>
-      {/if}
+            {#each planIds as planId}
+              <option value={planId}>{planId}</option>
+            {/each}
+          </select>
+        </label>
 
-      {#if formMessage && !submitted}
-        <p class="mt-3 text-sm text-white/80">{formMessage}</p>
-      {/if}
+        <label class="flex flex-col gap-1 text-sm md:col-span-2">
+          <span>Message</span>
+          <textarea
+            rows="3"
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="message"
+            bind:value={form.message}
+            placeholder="Anything specific we should know?"
+          ></textarea>
+        </label>
+
+        <label class="flex flex-col gap-2 text-sm md:col-span-2">
+          <span>Best time to contact</span>
+          <input
+            class="rounded-xl border border-white/20 bg-slate-900/55 px-3 py-2"
+            name="best_contact_time"
+            bind:value={form.bestContactTime}
+            placeholder="Any preferences"
+          />
+        </label>
+
+        <fieldset class="md:col-span-2">
+          <legend class="mb-2 text-sm">What's included in your quote *</legend>
+          <div class="grid gap-2 text-sm sm:grid-cols-2">
+            <label class="inline-flex items-center gap-2">
+              <input type="hidden" name="include_interior_detailing" value="false" />
+              <input type="checkbox" name="include_interior_detailing" value="true" bind:checked={form.includeInteriorDetailing} />
+              Interior detailing + carpet shampooing
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input type="hidden" name="include_wheel_cleaning" value="false" />
+              <input type="checkbox" name="include_wheel_cleaning" value="true" bind:checked={form.includeWheelCleaning} />
+              Full wheel cleaning
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input type="hidden" name="include_interior_vacuum" value="false" />
+              <input
+                type="checkbox"
+                name="include_interior_vacuum"
+                value="true"
+                bind:checked={form.includeInteriorVacuum}
+              />
+              Full interior vacuum + glass clean
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input type="hidden" name="include_ceramic_wax" value="false" />
+              <input type="checkbox" name="include_ceramic_wax" value="true" bind:checked={form.includeCeramicWax} />
+              Complimentary ceramic wax
+            </label>
+          </div>
+        </fieldset>
+
+        <input
+          class="col-span-1 rounded-full bg-glow-500 px-5 py-3 font-semibold text-slate-900 disabled:opacity-50 md:col-span-2"
+          type="submit"
+          value="Request Quote"
+          disabled={!ghlFormConfigured}
+        />
+      </form>
     </section>
 
     <footer class="rounded-[1.8rem] border border-white/10 bg-black/30 p-6">

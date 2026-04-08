@@ -7,6 +7,7 @@
   <script
     src="https://link.msgsndr.com/js/external-tracking.js"
     data-tracking-id="tk_6b8e14ba48b440209f9eb1d4b6196105"
+    data-debug="true"
     defer
   ></script>
 </svelte:head>
