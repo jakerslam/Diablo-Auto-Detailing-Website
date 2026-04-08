@@ -60,7 +60,7 @@
 
   const updateCarouselMetrics = () => {
     visibleCount = getVisibleCount();
-    cardWidth = `${100 / Math.max(1, visibleCount)}%`;
+    cardWidth = `${(100 / Math.max(1, visibleCount)) * 0.7}%`;
   };
 
   $: reviewQueue = buildReviewQueue(reviews);
