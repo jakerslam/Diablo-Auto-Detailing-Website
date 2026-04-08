@@ -190,7 +190,7 @@
 <div class="diablo-page flex min-h-screen flex-col">
   <header class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
-      <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top')} class="group inline-flex items-center gap-3">
+      <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
         <span
           class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/25"
         >
