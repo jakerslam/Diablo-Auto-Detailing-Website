@@ -16,8 +16,7 @@
   let reviewQueue: Review[] = [];
   let loopReviews: Review[] = [];
   let cardWidth = '100%';
-  let scrollDistance = '100%';
-  let animationDuration = 30;
+  let animationDuration = 26;
 
   const starRow = (rating: number) => '★'.repeat(Math.max(0, Math.min(5, rating)));
 
@@ -66,7 +65,6 @@
 
   $: reviewQueue = buildReviewQueue(reviews);
   $: loopReviews = [...reviewQueue, ...reviewQueue];
-  $: scrollDistance = `${(100 / Math.max(1, visibleCount)) * reviewQueue.length}%`;
   $: animationDuration = Math.max(25, reviewQueue.length * 2);
 
   onMount(() => {
@@ -83,7 +81,7 @@
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4">
     <div
       class="reviews-track flex"
-      style={`--scroll-distance: ${scrollDistance}; animation: review-marquee ${animationDuration}s linear infinite;`}
+      style={`animation: review-marquee ${animationDuration}s linear infinite;`}
     >
       {#each loopReviews as review}
         <article class="reviews-card flex-shrink-0 p-2" style={`width: ${cardWidth}`}>
@@ -115,7 +113,7 @@
       transform: translateX(0);
     }
     to {
-      transform: translateX(calc(-1 * var(--scroll-distance)));
+      transform: translateX(-50%);
     }
   }
 </style>

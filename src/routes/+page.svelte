@@ -272,9 +272,11 @@
         </div>
       </div>
 
-      <div class="grid gap-5 md:grid-cols-3">
+      <div class="grid items-stretch gap-5 md:grid-cols-3">
         {#each servicePlans as plan, index}
-          <Card className={index === servicePlans.length - 1 ? 'border-glow-400/50' : ''}>
+          <Card
+            className={`h-full flex flex-col ${index === servicePlans.length - 1 ? 'border-glow-400/50' : ''}`}
+          >
             <CardHeader>
               <div class="mb-2 flex items-center justify-between gap-2">
                 <CardTitle>{plan.name}</CardTitle>
@@ -284,18 +286,18 @@
               </div>
               <CardDescription>{plan.description}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-1 flex-col">
               <dl class="mt-4 space-y-2 text-sm text-white/80">
                 <div class="flex justify-between border-b border-white/10 pb-2">
                   <dt>Maximum rate</dt>
                   <dd class="font-semibold">${plan.recommendedPrice}</dd>
                 </div>
                 <div class="flex justify-between pb-2">
-                  <dt>Visit timing</dt>
+                  <dt>Frequency</dt>
                   <dd>{plan.recurringText}</dd>
                 </div>
               </dl>
-              <ul class="mt-3 space-y-2 text-sm">
+              <ul class="mt-3 flex-1 space-y-2 text-sm">
                 {#each plan.includedFeatures as feature}
                   <li class="flex items-start gap-2">
                     <span class="mt-1 h-2 w-2 rounded-full bg-glow-400"></span>
@@ -304,7 +306,7 @@
                 {/each}
               </ul>
               <Button
-                className="mt-5 w-full"
+                className="mt-auto w-full"
                 variant="outline"
                 on:click={() => {
                   setPlan(plan.id);
@@ -353,7 +355,7 @@
     <section id="reviews">
       <Card className="diablo-surface">
         <CardHeader>
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col items-center gap-1 text-center">
             <CardTitle>Reviews from satisfied customers</CardTitle>
             <CardDescription>
               <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="ml-1 text-glow-300 underline">
