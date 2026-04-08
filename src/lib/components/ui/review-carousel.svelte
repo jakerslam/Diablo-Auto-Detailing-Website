@@ -50,7 +50,7 @@
         <p class="text-sm leading-relaxed text-white/90">“{reviews[currentIndex].text}”</p>
         <div>
           <p class="text-sm font-semibold text-white/95">{reviews[currentIndex].name}</p>
-          <p class="mt-1 text-xs text-glow-300"> {starRow(reviews[currentIndex].rating)} {reviews[currentIndex].date}</p>
+          <p class="mt-1 text-xs font-semibold text-amber-400">{starRow(reviews[currentIndex].rating)} {reviews[currentIndex].date}</p>
         </div>
       </article>
     {/key}
