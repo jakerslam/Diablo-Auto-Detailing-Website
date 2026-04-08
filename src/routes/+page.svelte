@@ -353,6 +353,19 @@
       </Card>
     </section>
 
+    <section id="reviews">
+      <Card className="diablo-surface">
+        <CardHeader>
+            <div class="flex flex-col items-center gap-1 text-center">
+              <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <ReviewCarousel reviews={reviewItems} />
+        </CardContent>
+      </Card>
+    </section>
+
     <section class="grid gap-4 md:grid-cols-3">
       {#each whyChooseUs as reason}
         <Card className="diablo-surface">
@@ -484,19 +497,6 @@
               </li>
             {/each}
           </ol>
-        </CardContent>
-      </Card>
-    </section>
-
-    <section id="reviews">
-      <Card className="diablo-surface">
-        <CardHeader>
-            <div class="flex flex-col items-center gap-1 text-center">
-              <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ReviewCarousel reviews={reviewItems} />
         </CardContent>
       </Card>
     </section>
