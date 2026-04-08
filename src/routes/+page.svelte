@@ -12,10 +12,13 @@
   import CardDescription from '$lib/components/ui/card-description.svelte';
   import CardContent from '$lib/components/ui/card-content.svelte';
   import Input from '$lib/components/ui/input.svelte';
+  import FormField from '$lib/components/ui/form-field.svelte';
+  import CheckboxField from '$lib/components/ui/checkbox-field.svelte';
+  import SocialLink from '$lib/components/ui/social-link.svelte';
+  import HiddenInput from '$lib/components/ui/hidden-input.svelte';
+  import FormSubmit from '$lib/components/ui/form-submit.svelte';
   import Textarea from '$lib/components/ui/textarea.svelte';
-  import Label from '$lib/components/ui/label.svelte';
   import Select from '$lib/components/ui/select.svelte';
-  import Checkbox from '$lib/components/ui/checkbox.svelte';
   import AccordionItem from '$lib/components/ui/accordion-item.svelte';
 
   import '../app.css';
@@ -252,106 +255,98 @@
               </p>
             {/if}
 
-            <input type="hidden" name="source" value="Diablo Auto Detailing Website" />
-            <input type="hidden" name="selected_plan" value={form.plan} />
+            <HiddenInput name="source" value="Diablo Auto Detailing Website" />
+            <HiddenInput name="selected_plan" value={form.plan} />
 
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>First name *</Label>
-              <Input name="first_name" bind:value={form.firstName} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Last name *</Label>
-              <Input name="last_name" bind:value={form.lastName} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Phone *</Label>
-              <Input name="phone" type="tel" bind:value={form.phone} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Email</Label>
-              <Input name="email" type="email" bind:value={form.email} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>City or ZIP *</Label>
-              <Input name="city_or_zip" bind:value={form.city} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>ZIP *</Label>
-              <Input name="zip" bind:value={form.zip} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Vehicle year *</Label>
-              <Input name="vehicle_year" bind:value={form.vehicleYear} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Vehicle make *</Label>
-              <Input name="vehicle_make" bind:value={form.vehicleMake} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Vehicle model *</Label>
-              <Input name="vehicle_model" bind:value={form.vehicleModel} required />
-            </label>
-            <label class="flex flex-col gap-1 text-sm">
-              <Label>Preferred date window *</Label>
-              <Input name="preferred_window" bind:value={form.preferredWindow} required />
-            </label>
+            <FormField id="first_name" label="First name" required>
+              <Input id="first_name" name="first_name" bind:value={form.firstName} required />
+            </FormField>
+            <FormField id="last_name" label="Last name" required>
+              <Input id="last_name" name="last_name" bind:value={form.lastName} required />
+            </FormField>
+            <FormField id="phone" label="Phone" required>
+              <Input id="phone" name="phone" type="tel" bind:value={form.phone} required />
+            </FormField>
+            <FormField id="email" label="Email" required>
+              <Input id="email" name="email" type="email" bind:value={form.email} required />
+            </FormField>
+            <FormField id="city_or_zip" label="City or ZIP" required>
+              <Input id="city_or_zip" name="city_or_zip" bind:value={form.city} required />
+            </FormField>
+            <FormField id="zip" label="ZIP" required>
+              <Input id="zip" name="zip" bind:value={form.zip} required />
+            </FormField>
+            <FormField id="vehicle_year" label="Vehicle year" required>
+              <Input id="vehicle_year" name="vehicle_year" bind:value={form.vehicleYear} required />
+            </FormField>
+            <FormField id="vehicle_make" label="Vehicle make" required>
+              <Input id="vehicle_make" name="vehicle_make" bind:value={form.vehicleMake} required />
+            </FormField>
+            <FormField id="vehicle_model" label="Vehicle model" required>
+              <Input id="vehicle_model" name="vehicle_model" bind:value={form.vehicleModel} required />
+            </FormField>
+            <FormField id="preferred_window" label="Preferred date window" required>
+              <Input id="preferred_window" name="preferred_window" bind:value={form.preferredWindow} required />
+            </FormField>
 
-            <label class="flex flex-col gap-1 text-sm md:col-span-2">
-              <Label>Plan *</Label>
-              <Select name="plan" bind:value={form.plan}>
+            <FormField id="plan" label="Plan" required className="md:col-span-2">
+              <Select id="plan" name="plan" bind:value={form.plan}>
                 {#each planIds as planId}
                   <option value={planId}>{planId}</option>
                 {/each}
               </Select>
-            </label>
+            </FormField>
 
-            <label class="flex flex-col gap-1 text-sm md:col-span-2">
-              <Label>Message</Label>
+            <FormField id="message" label="Message" className="md:col-span-2">
               <Textarea
                 rows={3}
+                id="message"
                 name="message"
                 bind:value={form.message}
                 placeholder="Anything specific we should know?"
               />
-            </label>
+            </FormField>
 
-            <label class="flex flex-col gap-2 text-sm md:col-span-2">
-              <Label>Best time to contact</Label>
-              <Input name="best_contact_time" bind:value={form.bestContactTime} placeholder="Any preferences" />
-            </label>
+            <FormField id="best_contact_time" label="Best time to contact" className="md:col-span-2">
+              <Input
+                id="best_contact_time"
+                name="best_contact_time"
+                bind:value={form.bestContactTime}
+                placeholder="Any preferences"
+              />
+            </FormField>
 
             <fieldset class="md:col-span-2">
               <legend class="mb-2 text-sm">What's included in your quote *</legend>
               <div class="grid gap-2 text-sm sm:grid-cols-2">
-                <label class="inline-flex items-center gap-2">
-                  <input type="hidden" name="include_interior_detailing" value="false" />
-                  <Checkbox name="include_interior_detailing" bind:checked={form.includeInteriorDetailing} />
-                  Interior detailing + carpet shampooing
-                </label>
-                <label class="inline-flex items-center gap-2">
-                  <input type="hidden" name="include_wheel_cleaning" value="false" />
-                  <Checkbox name="include_wheel_cleaning" bind:checked={form.includeWheelCleaning} />
-                  Full wheel cleaning
-                </label>
-                <label class="inline-flex items-center gap-2">
-                  <input type="hidden" name="include_interior_vacuum" value="false" />
-                  <Checkbox name="include_interior_vacuum" bind:checked={form.includeInteriorVacuum} />
-                  Full interior vacuum + glass clean
-                </label>
-                <label class="inline-flex items-center gap-2">
-                  <input type="hidden" name="include_ceramic_wax" value="false" />
-                  <Checkbox name="include_ceramic_wax" bind:checked={form.includeCeramicWax} />
-                  Complimentary ceramic wax
-                </label>
+                <CheckboxField
+                  id="include_interior_detailing"
+                  name="include_interior_detailing"
+                  bind:checked={form.includeInteriorDetailing}
+                  label="Interior detailing + carpet shampooing"
+                />
+                <CheckboxField
+                  id="include_wheel_cleaning"
+                  name="include_wheel_cleaning"
+                  bind:checked={form.includeWheelCleaning}
+                  label="Full wheel cleaning"
+                />
+                <CheckboxField
+                  id="include_interior_vacuum"
+                  name="include_interior_vacuum"
+                  bind:checked={form.includeInteriorVacuum}
+                  label="Full interior vacuum + glass clean"
+                />
+                <CheckboxField
+                  id="include_ceramic_wax"
+                  name="include_ceramic_wax"
+                  bind:checked={form.includeCeramicWax}
+                  label="Complimentary ceramic wax"
+                />
               </div>
             </fieldset>
 
-            <input
-              class="col-span-1 rounded-full bg-glow-500 px-5 py-3 font-semibold text-slate-900 disabled:opacity-50 md:col-span-2"
-              type="submit"
-              value="Request Quote"
-              disabled={!ghlFormConfigured}
-            />
+            <FormSubmit value="Request Quote" disabled={!ghlFormConfigured} />
           </form>
         </CardContent>
       </Card>
@@ -361,9 +356,9 @@
       <div class="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
         <p>
           Follow:
-          <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="underline">Instagram</a> ·
-          <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" class="underline">Facebook</a> ·
-          <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="underline">Google</a>
+          <SocialLink href={socialLinks.instagram} label="Instagram" /> ·
+          <SocialLink href={socialLinks.facebook} label="Facebook" /> ·
+          <SocialLink href={socialLinks.google} label="Google" />
         </p>
         <p>Copyright © Diablo Auto Detailing</p>
       </div>

@@ -4,6 +4,7 @@
   export let checked = false;
   export let name = '';
   export let value = 'true';
+  export let id = '';
   export let required = false;
   export let className = '';
 </script>
@@ -11,6 +12,7 @@
 <input
   type="checkbox"
   {name}
+  {id}
   {value}
   {required}
   bind:checked

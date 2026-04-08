@@ -3,12 +3,14 @@
 
   export let className = '';
   export let name = '';
+  export let id = '';
   export let value = '';
   export let required = false;
 </script>
 
 <select
   {name}
+  {id}
   bind:value
   {required}
   class={cn(

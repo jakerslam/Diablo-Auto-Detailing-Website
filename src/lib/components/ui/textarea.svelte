@@ -4,6 +4,7 @@
   export let className = '';
   export let rows = 3;
   export let name = '';
+  export let id = '';
   export let required = false;
   export let placeholder = '';
   export let value = '';
@@ -12,6 +13,7 @@
 <textarea
   {rows}
   {name}
+  {id}
   bind:value
   {required}
   {placeholder}

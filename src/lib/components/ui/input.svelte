@@ -5,6 +5,7 @@
   export let type = 'text';
   export let value = '';
   export let name = '';
+  export let id = '';
   export let required = false;
   export let placeholder = '';
 </script>
@@ -12,6 +13,7 @@
 <input
   {type}
   {name}
+  {id}
   bind:value
   {placeholder}
   {required}
