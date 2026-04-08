@@ -363,6 +363,17 @@
   const getListPrice = (recommendedPrice: number, discount?: number) =>
     discount ? recommendedPrice + discount : recommendedPrice;
 
+  const getPlanComparisonItems = (plan: { id: PlanType; includedFeatures: string[] }) => [
+    ...plan.includedFeatures.map((feature) => ({
+      label: feature,
+      included: true
+    })),
+    {
+      label: 'Exterior reservice guarentee',
+      included: plan.id === 'monthly'
+    }
+  ];
+
   function trackEvent(eventName: string, detail: Record<string, string | number | boolean>) {
     if (typeof window === 'undefined') return;
 
@@ -608,10 +619,12 @@
                 </div>
               </dl>
               <ul class="mt-3 flex-1 space-y-2 text-sm text-white">
-                {#each plan.includedFeatures as feature}
-                  <li class="flex items-start gap-2">
-                    <span class="mt-1 h-2 w-2 rounded-full bg-glow-400"></span>
-                    <span>{feature}</span>
+                {#each getPlanComparisonItems(plan) as feature}
+                  <li class="flex items-center justify-between gap-4 border-b border-white/10 pb-2">
+                    <span>{feature.label}</span>
+                    <span class={`text-base font-semibold ${feature.included ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {feature.included ? '✓' : '✕'}
+                    </span>
                   </li>
                 {/each}
               </ul>
