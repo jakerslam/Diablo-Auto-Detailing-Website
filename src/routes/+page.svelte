@@ -233,7 +233,7 @@
       <Button variant="outline" href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'header_cta', false)}>Request Quote</Button>
     </div>
     <p class="mx-auto max-w-6xl pb-2 px-4 text-center text-sm text-white/65 sm:px-6 lg:px-8">
-      Need same-day help? Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
+      Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
     </p>
   </header>
 
