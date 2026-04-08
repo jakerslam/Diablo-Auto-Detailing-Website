@@ -464,7 +464,7 @@
       <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] lg:items-start">
         <div>
           <p class="diablo-kicker">MOBILE DETAILING IN WALNUT CREEK</p>
-          <h1 class="diablo-hero-title mt-4 max-w-3xl text-3xl font-extrabold leading-tight sm:text-5xl">
+          <h1 class="diablo-hero-title mt-4 max-w-3xl text-3xl font-semibold leading-tight sm:text-5xl">
             Premium detailing for drivers who want a spotless car without leaving their schedule behind
           </h1>
           <p class="mt-4 max-w-2xl text-[color:var(--text-primary)]">
