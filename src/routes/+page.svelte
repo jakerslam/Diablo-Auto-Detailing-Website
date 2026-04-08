@@ -56,8 +56,11 @@
   };
 
   onMount(async () => {
+    const base = import.meta.env.BASE_URL || '/';
+    const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+
     try {
-      const response = await fetch('/reviews.json');
+      const response = await fetch(`${normalizedBase}reviews.json`);
       if (!response.ok) return;
 
       const payload = await response.json();
@@ -355,13 +358,13 @@
     <section id="reviews">
       <Card className="diablo-surface">
         <CardHeader>
-          <div class="flex flex-col items-center gap-1 text-center">
-            <CardTitle>Reviews from satisfied customers</CardTitle>
-            <CardDescription>
-              <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="ml-1 text-glow-300 underline">
+            <div class="flex flex-col items-center gap-1 text-center">
+              <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
+              <CardDescription className="text-center">
+                <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="text-glow-300 underline">
                 View live Google profile
               </a>
-            </CardDescription>
+              </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
