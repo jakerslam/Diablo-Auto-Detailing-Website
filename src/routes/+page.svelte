@@ -14,7 +14,6 @@
   import Input from '$lib/components/ui/input.svelte';
   import FormField from '$lib/components/ui/form-field.svelte';
   import CheckboxField from '$lib/components/ui/checkbox-field.svelte';
-  import SocialLink from '$lib/components/ui/social-link.svelte';
   import HiddenInput from '$lib/components/ui/hidden-input.svelte';
   import FormSubmit from '$lib/components/ui/form-submit.svelte';
   import Textarea from '$lib/components/ui/textarea.svelte';
@@ -99,9 +98,16 @@
   }
 
   const phone = '(510) 631-1230';
+
+  const socialIconLinks = [
+    { name: 'Instagram', href: socialLinks.instagram, icon: 'https://cdn.simpleicons.org/instagram/FFFFFF' },
+    { name: 'Facebook', href: socialLinks.facebook, icon: 'https://cdn.simpleicons.org/facebook/FFFFFF' },
+    { name: 'Google', href: socialLinks.google, icon: 'https://cdn.simpleicons.org/google/FFFFFF' },
+    { name: 'Yelp', href: socialLinks.yelp, icon: 'https://cdn.simpleicons.org/yelp/FFFFFF' }
+  ];
 </script>
 
-<div class="diablo-page pb-24">
+<div class="diablo-page flex min-h-screen flex-col">
   <header class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
       <a href="#top" class="group inline-flex items-center gap-3">
@@ -136,7 +142,7 @@
     </p>
   </header>
 
-  <main id="top" class="mx-auto mt-8 max-w-6xl space-y-10 px-4 sm:px-6 lg:px-8">
+  <main id="top" class="mx-auto mt-8 max-w-6xl flex-1 space-y-10 px-4 sm:px-6 lg:px-8">
     <section class="diablo-surface" id="hero">
       <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] lg:items-start">
         <div>
@@ -453,28 +459,41 @@
   </main>
 
   <footer class="mt-12 w-full bg-black">
-    <div class="mx-auto flex max-w-6xl flex-col gap-4 border-t border-white/10 px-4 py-8 text-sm sm:px-6 lg:px-8">
-      <div class="grid gap-4 text-white md:grid-cols-3 md:items-center">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-6 border-t border-white/10 px-4 py-8 text-sm sm:px-6 lg:px-8">
+      <div class="grid gap-6 md:grid-cols-3">
         <div>
-          <p class="text-lg font-semibold">Diablo Auto Detailing</p>
-          <p class="mt-1 text-white/70">Mobile detailing in Walnut Creek and nearby areas</p>
+          <p class="text-lg font-semibold text-white">Diablo Auto Detailing</p>
+          <p class="mt-1 text-white/70">Mobile detailing in Walnut Creek and nearby cities.</p>
+          <p class="mt-4 text-xs text-white/55">© Diablo Auto Detailing • Mon-Sat 8:00 AM - 6:30 PM</p>
         </div>
-        <nav class="flex flex-wrap gap-4 text-white/80">
-          <a href="#plans" class="hover:text-glow-300">Plans</a>
-          <a href="#how" class="hover:text-glow-300">Process</a>
-          <a href="#reviews" class="hover:text-glow-300">Reviews</a>
-          <a href="#faq" class="hover:text-glow-300">FAQ</a>
-          <a href="#quote" class="hover:text-glow-300">Request Quote</a>
-        </nav>
-        <p class="text-white/80">
-          Follow:
-          <SocialLink href={socialLinks.instagram} label="Instagram" className="text-white/80" /> ·
-          <SocialLink href={socialLinks.facebook} className="text-white/80" label="Facebook" /> ·
-          <SocialLink href={socialLinks.google} className="text-white/80" label="Google" /> ·
-          <SocialLink href={socialLinks.yelp} className="text-white/80" label="Yelp" />
-        </p>
+        <div>
+          <p class="mb-3 text-white/80">Quick Links</p>
+          <nav class="flex flex-wrap gap-3 text-white/75">
+            <a href="#plans" class="hover:text-glow-300">Plans</a>
+            <a href="#how" class="hover:text-glow-300">Process</a>
+            <a href="#reviews" class="hover:text-glow-300">Reviews</a>
+            <a href="#faq" class="hover:text-glow-300">FAQ</a>
+            <a href="#quote" class="hover:text-glow-300">Request Quote</a>
+          </nav>
+        </div>
+        <div>
+          <p class="mb-3 text-white/80">Follow us</p>
+          <div class="flex gap-3">
+            {#each socialIconLinks as social}
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.name}
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+              >
+                <img src={social.icon} alt="" class="h-5 w-5" />
+              </a>
+            {/each}
+          </div>
+        </div>
       </div>
-      <p class="text-xs text-white/55">© Diablo Auto Detailing • {footerNotes.join(' • ')}</p>
+      <p class="border-t border-white/10 pt-4 text-xs text-white/55">{footerNotes.join(' • ')}</p>
     </div>
   </footer>
 
