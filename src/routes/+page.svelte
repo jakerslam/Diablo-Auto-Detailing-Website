@@ -153,10 +153,14 @@
     });
   }
 
-  function onSectionNav(event: MouseEvent, sectionId: string, trackingLabel: string) {
+  function onSectionNav(event: MouseEvent, sectionId: string, trackingLabel: string, alignToBottom = true) {
     event.preventDefault();
     onQuoteIntent(trackingLabel);
-    scrollSectionToBottom(sectionId);
+    if (alignToBottom) {
+      scrollSectionToBottom(sectionId);
+      return;
+    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function setPlan(plan: PlanType) {
@@ -202,7 +206,7 @@
           FAQ
         </a>
       </nav>
-      <Button variant="outline" href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'header_cta')}>Request Quote</Button>
+      <Button variant="outline" href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'header_cta', false)}>Request Quote</Button>
     </div>
     <p class="mx-auto max-w-6xl pb-2 px-4 text-center text-sm text-white/65 sm:px-6 lg:px-8">
       Need same-day help? Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
@@ -222,7 +226,7 @@
             interior detailing, wheel cleaning, and a complimentary ceramic wax finish.
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta')}>Get My Quote</Button>
+            <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta', false)}>Get My Quote</Button>
             <Button variant="outline" href="#plans" on:click={(event) => onSectionNav(event, 'plans', 'hero_plans')}>Compare Plans</Button>
           </div>
         </div>
@@ -532,7 +536,7 @@
             <a href="#how" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'how', 'footer_how')}>Process</a>
             <a href="#reviews" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'reviews', 'footer_reviews')}>Reviews</a>
             <a href="#faq" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'faq', 'footer_faq')}>FAQ</a>
-            <a href="#quote" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'quote', 'footer_quote')}>Request Quote</a>
+            <a href="#quote" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'quote', 'footer_quote', false)}>Request Quote</a>
           </nav>
         </div>
         <div>
@@ -558,7 +562,7 @@
 
   <a
     href="#quote"
-    on:click={(event) => onSectionNav(event, 'quote', 'floating_mobile_cta')}
+    on:click={(event) => onSectionNav(event, 'quote', 'floating_mobile_cta', false)}
     class="fixed bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-glow-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg md:hidden"
   >
     Get Quote
