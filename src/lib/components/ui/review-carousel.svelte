@@ -52,6 +52,13 @@
     return 1;
   };
 
+  const getCardWidth = () => {
+    if (typeof window === 'undefined') return '100%';
+    if (window.innerWidth <= 768) return '100%';
+
+    return `${(100 / Math.max(1, visibleCount)) * 0.7}%`;
+  };
+
   const getReviewSpeed = () => {
     if (typeof window === 'undefined') return 1;
     return window.innerWidth <= 768 ? MOBILE_REVIEW_SPEED_MULTIPLIER : 1;
@@ -59,7 +66,7 @@
 
   const updateCarouselMetrics = () => {
     visibleCount = getVisibleCount();
-    cardWidth = `${(100 / Math.max(1, visibleCount)) * 0.7}%`;
+    cardWidth = getCardWidth();
     reviewSpeed = getReviewSpeed();
   };
 
@@ -78,16 +85,16 @@
 </script>
 
 {#if reviewQueue.length > 0}
-  <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4">
-    <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s; --review-speed: ${reviewSpeed};`}>
-      {#each loopReviews as review}
-        <article
-          class="reviews-card flex-shrink-0 p-2"
-          style={`width: ${cardWidth}; max-width: 360px;`}
-        >
-          <div
-            class="mx-auto flex aspect-square h-full min-h-0 w-full max-w-[360px] flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+    <div class="relative min-h-[18rem] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4 md:min-h-0">
+      <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s; --review-speed: ${reviewSpeed};`}>
+        {#each loopReviews as review}
+          <article
+            class="reviews-card flex-shrink-0 h-full p-2"
+            style={`width: ${cardWidth}; max-width: 360px;`}
           >
+            <div
+              class="review-card mx-auto flex h-full min-h-0 w-full max-w-[360px] flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4 md:aspect-square"
+            >
             <p class="review-text text-sm leading-relaxed text-[color:var(--text-muted)]">“{review.text}”</p>
             <div>
               <p class="text-sm font-semibold text-[color:var(--text-primary)]">{formatReviewerName(review.name)}</p>
