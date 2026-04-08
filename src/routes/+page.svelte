@@ -1,7 +1,15 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { servicePlans, baseServiceHours, fallbackModelPrice } from '$lib/data/pricing';
-  import { serviceAreas, faqItems, socialLinks, footerNotes, googleReviews } from '$lib/data/site-data';
+  import {
+    serviceAreas,
+    faqItems,
+    socialLinks,
+    footerNotes,
+    googleReviews,
+    googlePhotos,
+    businessProfile
+  } from '$lib/data/site-data';
   import type { LeadFormValues, PlanType } from '$lib/types/form';
   import { emptyLeadForm } from '$lib/types/form';
 
@@ -21,6 +29,7 @@
   import Select from '$lib/components/ui/select.svelte';
   import AccordionItem from '$lib/components/ui/accordion-item.svelte';
   import ReviewCarousel from '$lib/components/ui/review-carousel.svelte';
+  import GooglePhotoCarousel from '$lib/components/ui/google-photo-carousel.svelte';
 
   import '../app.css';
 
@@ -29,6 +38,8 @@
     rating: number;
     text: string;
     date: string;
+    photo?: string;
+    photoAlt?: string;
   };
 
   let form: LeadFormValues = {
@@ -36,6 +47,9 @@
   };
 
   let reviewItems: ReviewData[] = googleReviews;
+  let photoItems: { src: string; alt?: string }[] = googlePhotos
+    .slice(0, 20)
+    .map((photo) => ({ src: photo.url, alt: photo.alt }));
   let showFloatingQuote = true;
 
   const isElementInViewport = (id: string) => {
@@ -69,7 +83,9 @@
           name: String(candidate?.name || '').trim(),
           rating: Number(candidate?.rating) || 0,
           text: String(candidate?.text || '').trim(),
-          date: String(candidate?.date || '').trim()
+          date: String(candidate?.date || '').trim(),
+          photo: String(candidate?.photo || '').trim(),
+          photoAlt: String(candidate?.photoAlt || '').trim()
         };
       })
       .filter((review) => review.name && review.text && review.rating > 0);
@@ -108,9 +124,22 @@
       const loadedReviews = sanitizeReviews(payload);
       if (loadedReviews.length > 0) {
         reviewItems = loadedReviews;
+        const loadedPhotos = loadedReviews
+          .filter((review) => review.photo)
+          .map((review) => ({
+            src: review.photo as string,
+            alt: review.photoAlt || `${review.name} review photo`
+          }));
+
+        if (loadedPhotos.length > 0) {
+          photoItems = loadedPhotos.slice(0, 20);
+        }
       }
     } catch {
       reviewItems = googleReviews;
+      photoItems = googlePhotos
+        .slice(0, 20)
+        .map((photo) => ({ src: photo.url, alt: photo.alt }));
     }
 
     updateFloatingQuoteVisibility();
@@ -237,7 +266,7 @@
     scrollSectionToTop('quote');
   }
 
-  const phone = '(510) 631-1230';
+  const phone = businessProfile.phone;
 
   const socialIconLinks = [
     { name: 'Instagram', href: socialLinks.instagram, icon: 'https://cdn.simpleicons.org/instagram/FFFFFF' },
@@ -308,6 +337,20 @@
           {/each}
         </div>
       </div>
+    </section>
+
+    <section class="space-y-4">
+      <Card className="diablo-surface">
+        <CardHeader className="items-center text-center">
+          <CardTitle>Recent Google photos</CardTitle>
+          <CardDescription className="text-[color:var(--text-muted)]">
+            Up to 20 images from the listing photo feed.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <GooglePhotoCarousel photos={photoItems} />
+        </CardContent>
+      </Card>
     </section>
 
     <section class="grid gap-4 md:grid-cols-3">
@@ -450,11 +493,6 @@
         <CardHeader>
             <div class="flex flex-col items-center gap-1 text-center">
               <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
-              <CardDescription className="text-center text-[color:var(--text-muted)]">
-                <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="text-glow-300 underline">
-                View live Google profile
-              </a>
-              </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
