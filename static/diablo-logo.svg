@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="256" fill="#0B0B0A"/>
+  <circle cx="256" cy="176" r="104" stroke="#C59B43" stroke-width="8"/>
+  <path d="M168 218C191 205 211 188 229 167C237 184 245 196 256 208C269 188 283 173 304 152C316 169 330 187 349 201" stroke="#C59B43" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M164 237C197 226 228 226 260 237C285 245 318 245 348 233" stroke="#C59B43" stroke-width="8" stroke-linecap="round"/>
+  <path d="M176 264C198 251 223 245 251 245C285 245 313 254 337 272" stroke="#C59B43" stroke-width="8" stroke-linecap="round"/>
+  <text x="256" y="370" text-anchor="middle" fill="#C59B43" font-size="74" font-family="Georgia, 'Times New Roman', serif" letter-spacing="4">DIABLO</text>
+  <text x="256" y="416" text-anchor="middle" fill="#F4F1EA" font-size="28" font-family="Arial, sans-serif" letter-spacing="6">AUTO DETAILING</text>
+</svg>

@@ -16,9 +16,11 @@
   let visibleCount = 1;
   let photoQueue: Photo[] = [];
   let loopPhotos: Photo[] = [];
+  let renderedPhotos: Photo[] = [];
   let cardWidth = '100%';
   let animationDuration = 24;
   let photoSpeed = 1;
+  let shouldAnimate = false;
 
   const normalizePhotos = (input: Photo[]) => {
     if (!Array.isArray(input)) return [];
@@ -40,11 +42,11 @@
     return 1;
   };
 
-  const getCardWidth = () => {
+  const getCardWidth = (columnCount: number) => {
     if (typeof window === 'undefined') return '100%';
     if (window.innerWidth <= 768) return '100%';
 
-    return `${(100 / Math.max(1, visibleCount)) * 0.82}%`;
+    return `${(100 / Math.max(1, columnCount)) * 0.82}%`;
   };
 
   const getPhotoSpeed = () => {
@@ -54,12 +56,14 @@
 
   const updateCarouselMetrics = () => {
     visibleCount = getVisibleCount();
-    cardWidth = getCardWidth();
     photoSpeed = getPhotoSpeed();
   };
 
   $: photoQueue = normalizePhotos(photos);
   $: loopPhotos = [...photoQueue, ...photoQueue];
+  $: shouldAnimate = photoQueue.length > visibleCount;
+  $: renderedPhotos = shouldAnimate ? loopPhotos : photoQueue;
+  $: cardWidth = getCardWidth(Math.min(visibleCount, photoQueue.length || 1));
   $: animationDuration = Math.max(12, (photoQueue.length * PHOTO_ANIMATION_UNIT) / photoSpeed);
 
   onMount(() => {
@@ -74,10 +78,10 @@
 {#if photoQueue.length > 0}
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-3">
     <div
-      class={`google-photo-track flex ${reverseDirection ? 'reverse-direction' : ''}`}
+      class={`google-photo-track flex ${reverseDirection ? 'reverse-direction' : ''} ${shouldAnimate ? 'is-animated' : ''}`}
       style={`--google-photo-duration: ${animationDuration}s; --google-photo-speed: ${photoSpeed}; --google-photo-width: ${cardWidth};`}
     >
-      {#each loopPhotos as photo}
+      {#each renderedPhotos as photo}
         <figure
           class="google-photo-card flex-shrink-0 p-2"
           style="width: var(--google-photo-width); max-width: 360px;"
@@ -97,10 +101,14 @@
 <style>
   .google-photo-track {
     will-change: transform;
-    animation: google-photo-marquee calc(var(--google-photo-duration, 24s) / var(--google-photo-speed, 1)) linear infinite;
-    animation-timing-function: linear;
+    animation: none;
     animation-direction: normal;
     --google-photo-distance: -50%;
+  }
+
+  .google-photo-track.is-animated {
+    animation: google-photo-marquee calc(var(--google-photo-duration, 24s) / var(--google-photo-speed, 1)) linear infinite;
+    animation-timing-function: linear;
   }
 
   .google-photo-track.reverse-direction {

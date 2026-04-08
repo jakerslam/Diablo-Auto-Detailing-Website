@@ -127,6 +127,11 @@
     color: var(--text-primary);
   }
 
+  .diablo-hero-title {
+    font-family: 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
+    letter-spacing: -0.03em;
+  }
+
   .diablo-subtitle {
     @apply max-w-3xl text-sm;
     color: var(--text-muted);

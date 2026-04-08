@@ -425,17 +425,14 @@
     { name: 'Google', href: socialLinks.google, icon: 'https://cdn.simpleicons.org/google/FFFFFF' },
     { name: 'Yelp', href: socialLinks.yelp, icon: 'https://cdn.simpleicons.org/yelp/FFFFFF' }
   ];
+  const brandLogoPath = `${import.meta.env.BASE_URL || '/'}diablo-logo.svg`;
 </script>
 
 <div class="diablo-page flex min-h-screen flex-col">
   <header id="topbar" class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
       <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
-        <span
-          class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/25"
-        >
-          DX
-        </span>
+        <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-11 w-11 rounded-full object-cover shadow-lg shadow-black/25" />
         <div>
           <p class="text-lg font-semibold tracking-wide">Diablo Auto Detailing</p>
           <p class="text-xs text-white/65">Mobile Car Detailing in Walnut Creek</p>
@@ -467,7 +464,7 @@
       <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] lg:items-start">
         <div>
           <p class="diablo-kicker">MOBILE DETAILING IN WALNUT CREEK</p>
-          <h1 class="mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
+          <h1 class="diablo-hero-title mt-4 max-w-3xl text-3xl font-extrabold leading-tight sm:text-5xl">
             Premium detailing for drivers who want a spotless car without leaving their schedule behind
           </h1>
           <p class="mt-4 max-w-2xl text-[color:var(--text-primary)]">
@@ -504,7 +501,7 @@
               <GooglePhotoCarousel photos={photoItems} reverseDirection={true} />
             {:else}
               <div class="rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-5 text-center text-sm text-[color:var(--text-muted)]">
-                Review and Google profile photos will appear here as soon as image URLs are available in the feed.
+                No photos avaiable
               </div>
             {/if}
           </div>

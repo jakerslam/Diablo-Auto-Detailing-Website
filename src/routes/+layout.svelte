@@ -11,6 +11,7 @@
     Boolean(canonicalBase) && configuredSiteUrl.toLowerCase().endsWith(canonicalBase.toLowerCase());
   const canonicalRoot = hasBaseInUrl ? configuredSiteUrl.slice(0, -canonicalBase.length) : configuredSiteUrl;
   const canonicalUrl = `${canonicalRoot}${canonicalBase}/`;
+  const brandLogoUrl = `${canonicalUrl}diablo-logo.svg`;
   const title = `${businessProfile.name} | Mobile Car Detailing in Walnut Creek & East Bay`;
   const description =
     'Diablo Auto Detailing provides mobile interior and exterior car detailing in Walnut Creek and nearby East Bay cities, with one-time and recurring plans plus local in-home pickup/drop-off options.';
@@ -80,8 +81,8 @@
     '@id': `${canonicalUrl}#business`,
     name: businessProfile.name,
     url: canonicalUrl,
-    image: googlePhotos[0]?.url || undefined,
-    logo: googlePhotos[0]?.url || canonicalUrl,
+    image: googlePhotos[0]?.url || brandLogoUrl,
+    logo: brandLogoUrl,
     telephone: businessProfile.phone,
     description: businessProfile.description,
     serviceType: businessProfile.serviceType,
@@ -173,13 +174,15 @@
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={googlePhotos[0]?.url || ''} />
-  <meta property="og:image:alt" content="Diablo Auto Detailing service work" />
+  <meta property="og:image" content={googlePhotos[0]?.url || brandLogoUrl} />
+  <meta property="og:image:alt" content="Diablo Auto Detailing logo" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@diabloautodetailing" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={googlePhotos[0]?.url || ''} />
+  <meta name="twitter:image" content={googlePhotos[0]?.url || brandLogoUrl} />
+  <link rel="icon" href={`${base}/diablo-logo.svg`} type="image/svg+xml" />
+  <link rel="apple-touch-icon" href={`${base}/diablo-logo.svg`} />
   <link rel="canonical" href={canonicalUrl} />
   <link rel="alternate" hreflang="en-US" href={canonicalUrl} />
   <script type="application/ld+json">

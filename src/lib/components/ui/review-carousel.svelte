@@ -17,9 +17,11 @@
   let visibleCount = 1;
   let reviewQueue: Review[] = [];
   let loopReviews: Review[] = [];
+  let renderedReviews: Review[] = [];
   let cardWidth = '100%';
   let animationDuration = 26;
   let reviewSpeed = 1;
+  let shouldAnimate = false;
 
   const starRow = (rating: number) => '★'.repeat(Math.max(0, Math.min(5, rating)));
 
@@ -52,11 +54,11 @@
     return 1;
   };
 
-  const getCardWidth = () => {
+  const getCardWidth = (columnCount: number) => {
     if (typeof window === 'undefined') return '100%';
     if (window.innerWidth <= 768) return '100%';
 
-    return `${(100 / Math.max(1, visibleCount)) * 0.7}%`;
+    return `${(100 / Math.max(1, columnCount)) * 0.7}%`;
   };
 
   const getReviewSpeed = () => {
@@ -66,12 +68,14 @@
 
   const updateCarouselMetrics = () => {
     visibleCount = getVisibleCount();
-    cardWidth = getCardWidth();
     reviewSpeed = getReviewSpeed();
   };
 
   $: reviewQueue = buildReviewQueue(reviews);
   $: loopReviews = [...reviewQueue, ...reviewQueue];
+  $: shouldAnimate = reviewQueue.length > visibleCount;
+  $: renderedReviews = shouldAnimate ? loopReviews : reviewQueue;
+  $: cardWidth = getCardWidth(Math.min(visibleCount, reviewQueue.length || 1));
   $: animationDuration = Math.max(12, (reviewQueue.length * REVIEW_ANIMATION_UNIT) / reviewSpeed);
 
   onMount(() => {
@@ -86,8 +90,8 @@
 
 {#if reviewQueue.length > 0}
     <div class="relative min-h-[18rem] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4 md:min-h-0">
-      <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s; --review-speed: ${reviewSpeed};`}>
-        {#each loopReviews as review}
+      <div class={`reviews-track flex ${shouldAnimate ? 'is-animated' : ''}`} style={`--review-duration: ${animationDuration}s; --review-speed: ${reviewSpeed};`}>
+        {#each renderedReviews as review}
           <article
             class="reviews-card flex-shrink-0 h-full p-2"
             style={`width: ${cardWidth}; max-width: 360px;`}
@@ -113,6 +117,9 @@
 <style>
   .reviews-track {
     will-change: transform;
+  }
+
+  .reviews-track.is-animated {
     animation: review-marquee calc(var(--review-duration, 26s) / var(--review-speed, 1)) linear infinite;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
