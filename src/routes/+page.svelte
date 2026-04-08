@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { servicePlans, baseServiceHours, fallbackModelPrice } from '$lib/data/pricing';
   import { serviceAreas, faqItems, socialLinks, footerNotes, googleReviews } from '$lib/data/site-data';
   import type { LeadFormValues, PlanType } from '$lib/types/form';
@@ -36,6 +36,28 @@
   };
 
   let reviewItems: ReviewData[] = googleReviews;
+  let showFloatingQuote = true;
+
+  const isElementInViewport = (id: string) => {
+    if (typeof window === 'undefined') return false;
+    const element = document.getElementById(id);
+    if (!element) return false;
+
+    const rect = element.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  };
+
+  function updateFloatingQuoteVisibility() {
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth > 768) {
+      showFloatingQuote = true;
+      return;
+    }
+
+    const quoteInView = isElementInViewport('quote');
+    const topbarInView = isElementInViewport('topbar');
+    showFloatingQuote = !(quoteInView || topbarInView);
+  }
 
   const sanitizeReviews = (input: unknown): ReviewData[] => {
     if (!Array.isArray(input)) return [];
@@ -69,6 +91,10 @@
           `${window.location.pathname}${window.location.search}`
         );
       }
+
+      updateFloatingQuoteVisibility();
+      window.addEventListener('scroll', updateFloatingQuoteVisibility, { passive: true });
+      window.addEventListener('resize', updateFloatingQuoteVisibility);
     }
 
     const base = import.meta.env.BASE_URL || '/';
@@ -86,6 +112,14 @@
     } catch {
       reviewItems = googleReviews;
     }
+
+    updateFloatingQuoteVisibility();
+  });
+
+  onDestroy(() => {
+    if (typeof window === 'undefined') return;
+    window.removeEventListener('scroll', updateFloatingQuoteVisibility);
+    window.removeEventListener('resize', updateFloatingQuoteVisibility);
   });
 
   const ghlFormEndpoint =
@@ -214,7 +248,7 @@
 </script>
 
 <div class="diablo-page flex min-h-screen flex-col">
-  <header class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
+  <header id="topbar" class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
       <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
         <span
@@ -604,7 +638,7 @@
   <a
     href="#quote"
     on:click={(event) => onSectionNav(event, 'quote', 'floating_mobile_cta', false)}
-    class="fixed bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-glow-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg md:hidden"
+    class={`fixed bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-glow-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg ${showFloatingQuote ? '' : 'hidden'} md:hidden`}
   >
     Get Quote
   </a>
