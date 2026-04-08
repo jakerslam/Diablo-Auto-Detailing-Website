@@ -1,41 +1,23 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
-  export let reviews: {
+  type Review = {
     name: string;
     rating: number;
     text: string;
     date: string;
-  }[] = [];
+  };
 
-  export let durationMs = 5000;
+  export let reviews: Review[] = [];
 
-  let currentIndex = 0;
-  let timer: ReturnType<typeof setInterval> | undefined;
+  const MAX_QUEUE_SIZE = 30;
+
   let visibleCount = 1;
-  let cardWidth = 100;
-
-  const getVisibleCount = () => {
-    if (typeof window === 'undefined') return 1;
-    if (window.innerWidth >= 1024) return 3;
-    if (window.innerWidth >= 640) return 2;
-    return 1;
-  };
-
-  const clampIndex = () => {
-    const maxIndex = Math.max(0, total - visibleCount);
-    if (currentIndex > maxIndex) {
-      currentIndex = maxIndex;
-    }
-  };
-
-  const updateCarouselMetrics = () => {
-    visibleCount = getVisibleCount();
-    cardWidth = 100 / Math.max(1, visibleCount);
-    clampIndex();
-  };
-
-  const total = reviews.length;
+  let reviewQueue: Review[] = [];
+  let loopReviews: Review[] = [];
+  let cardWidth = '100%';
+  let scrollDistance = '100%';
+  let animationDuration = 30;
 
   const starRow = (rating: number) => '★'.repeat(Math.max(0, Math.min(5, rating)));
 
@@ -54,44 +36,57 @@
     return `${firstName} ${lastInitial}.`;
   };
 
+  const buildReviewQueue = (input: Review[]) => {
+    const sanitized = input.filter((item) => item.name && item.text && item.rating > 0);
+    if (sanitized.length === 0) return [];
+
+    if (sanitized.length >= MAX_QUEUE_SIZE) {
+      return sanitized.slice(0, MAX_QUEUE_SIZE);
+    }
+
+    const queue = [...sanitized];
+    for (let i = 0; queue.length < MAX_QUEUE_SIZE; i += 1) {
+      queue.push(sanitized[i % sanitized.length]);
+    }
+
+    return queue;
+  };
+
+  const getVisibleCount = () => {
+    if (typeof window === 'undefined') return 1;
+    if (window.innerWidth >= 1024) return 3;
+    if (window.innerWidth >= 640) return 2;
+    return 1;
+  };
+
+  const updateCarouselMetrics = () => {
+    visibleCount = getVisibleCount();
+    cardWidth = `${100 / Math.max(1, visibleCount)}%`;
+  };
+
+  $: reviewQueue = buildReviewQueue(reviews);
+  $: loopReviews = [...reviewQueue, ...reviewQueue];
+  $: scrollDistance = `${(100 / Math.max(1, visibleCount)) * reviewQueue.length}%`;
+  $: animationDuration = Math.max(25, reviewQueue.length * 2);
+
   onMount(() => {
     updateCarouselMetrics();
-    if (total <= 1) return;
-
-    timer = setInterval(() => {
-      const maxIndex = Math.max(0, total - visibleCount);
-      currentIndex = maxIndex === 0 ? 0 : (currentIndex + 1) % (maxIndex + 1);
-    }, durationMs);
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', updateCarouselMetrics);
-    }
+    window.addEventListener('resize', updateCarouselMetrics);
 
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', updateCarouselMetrics);
-      }
+      window.removeEventListener('resize', updateCarouselMetrics);
     };
-  });
-
-  onDestroy(() => {
-    if (timer) {
-      clearInterval(timer);
-    }
   });
 </script>
 
-{#if total > 0}
-<div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4">
+{#if reviewQueue.length > 0}
+  <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4">
     <div
-      class="reviews-track flex w-full transition-transform duration-500 ease-in-out"
-      style={`transform: translateX(-${currentIndex * cardWidth}%);`}
+      class="reviews-track flex"
+      style={`--scroll-distance: ${scrollDistance}; animation: review-marquee ${animationDuration}s linear infinite;`}
     >
-      {#each reviews as review}
-        <article class="reviews-card flex-shrink-0 px-2" style={`width: ${cardWidth}%`}>
+      {#each loopReviews as review}
+        <article class="reviews-card flex-shrink-0 p-2" style={`width: ${cardWidth}`}>
           <div class="flex aspect-square h-full min-h-0 flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4">
             <p class="text-sm leading-relaxed text-white/90">“{review.text}”</p>
             <div>
@@ -107,3 +102,20 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .reviews-track {
+    will-change: transform;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes review-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-1 * var(--scroll-distance)));
+    }
+  }
+</style>

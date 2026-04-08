@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { servicePlans, baseServiceHours, fallbackModelPrice } from '$lib/data/pricing';
   import { serviceAreas, faqItems, socialLinks, footerNotes, googleReviews } from '$lib/data/site-data';
   import type { LeadFormValues, PlanType } from '$lib/types/form';
@@ -23,9 +24,51 @@
 
   import '../app.css';
 
+  type ReviewData = {
+    name: string;
+    rating: number;
+    text: string;
+    date: string;
+  };
+
   let form: LeadFormValues = {
     ...emptyLeadForm
   };
+
+  let reviewItems: ReviewData[] = googleReviews;
+
+  const sanitizeReviews = (input: unknown): ReviewData[] => {
+    if (!Array.isArray(input)) return [];
+
+    const parsed = input
+      .map((item) => {
+        const candidate = item as ReviewData;
+        return {
+          name: String(candidate?.name || '').trim(),
+          rating: Number(candidate?.rating) || 0,
+          text: String(candidate?.text || '').trim(),
+          date: String(candidate?.date || '').trim()
+        };
+      })
+      .filter((review) => review.name && review.text && review.rating > 0);
+
+    return parsed.slice(0, 30);
+  };
+
+  onMount(async () => {
+    try {
+      const response = await fetch('/reviews.json');
+      if (!response.ok) return;
+
+      const payload = await response.json();
+      const loadedReviews = sanitizeReviews(payload);
+      if (loadedReviews.length > 0) {
+        reviewItems = loadedReviews;
+      }
+    } catch {
+      reviewItems = googleReviews;
+    }
+  });
 
   const ghlFormEndpoint =
     typeof import.meta !== 'undefined' ? import.meta.env.PUBLIC_GHL_FORM_ENDPOINT || '' : '';
@@ -303,7 +346,6 @@
         <CardContent>
           <p class="text-white/80">Mon-Sat 8:00 AM - 6:30 PM</p>
           <p class="mt-2 text-white/80">30 minute route transitions • 60 min lunch break</p>
-          <p class="mt-3 text-sm text-white/65">If weekend-only booking is requested and Saturdays are full, call us for Sunday options.</p>
         </CardContent>
       </Card>
     </section>
@@ -321,7 +363,7 @@
           </div>
         </CardHeader>
         <CardContent>
-          <ReviewCarousel reviews={googleReviews} />
+          <ReviewCarousel reviews={reviewItems} />
         </CardContent>
       </Card>
     </section>
