@@ -8,6 +8,10 @@
   export let id = '';
   export let required = false;
   export let placeholder = '';
+  export let list = '';
+  export let min = '';
+  export let max = '';
+  export let autocomplete = '';
 </script>
 
   <input
@@ -17,6 +21,10 @@
     bind:value
     {placeholder}
     {required}
+    {list}
+    {min}
+    {max}
+    {autocomplete}
     class={cn(
       'h-11 w-full rounded-xl border border-white/20 bg-slate-900/45 px-3 py-2 text-sm text-white placeholder:text-white/55 focus:outline-none focus:ring-2 focus:ring-glow-500/55 disabled:cursor-not-allowed disabled:opacity-60',
       className

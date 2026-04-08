@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
 
   type Photo = {
     src: string;
@@ -15,12 +15,15 @@
 
   let visibleCount = 1;
   let photoQueue: Photo[] = [];
-  let loopPhotos: Photo[] = [];
-  let renderedPhotos: Photo[] = [];
   let cardWidth = '100%';
   let animationDuration = 24;
   let photoSpeed = 1;
   let shouldAnimate = false;
+  let cycleWidth = 0;
+  let trackElement: HTMLDivElement | null = null;
+  let animationFrame = 0;
+  let lastTimestamp = 0;
+  let offsetX = 0;
 
   const normalizePhotos = (input: Photo[]) => {
     if (!Array.isArray(input)) return [];
@@ -59,35 +62,120 @@
     photoSpeed = getPhotoSpeed();
   };
 
+  const updateCycleWidth = () => {
+    if (!trackElement || !shouldAnimate) {
+      cycleWidth = 0;
+      return;
+    }
+
+    cycleWidth = trackElement.scrollWidth;
+  };
+
+  const stopAnimation = () => {
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+    lastTimestamp = 0;
+  };
+
+  const resetTrack = () => {
+    offsetX = 0;
+    if (trackElement) {
+      trackElement.style.transform = 'translateX(0px)';
+    }
+  };
+
+  const animateTrack = (timestamp: number) => {
+    if (!trackElement || !shouldAnimate || cycleWidth <= 0) {
+      stopAnimation();
+      return;
+    }
+
+    if (!lastTimestamp) {
+      lastTimestamp = timestamp;
+    }
+
+    const deltaMs = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+    const pixelsPerMs = cycleWidth / (Math.max(animationDuration, 12) * 1000);
+    offsetX += (reverseDirection ? 1 : -1) * deltaMs * pixelsPerMs;
+
+    if (reverseDirection) {
+      let lastCard = trackElement.lastElementChild as HTMLElement | null;
+      while (lastCard) {
+        const lastWidth = lastCard.getBoundingClientRect().width;
+        if (offsetX < lastWidth) break;
+        offsetX -= lastWidth;
+        trackElement.insertBefore(lastCard, trackElement.firstElementChild);
+        lastCard = trackElement.lastElementChild as HTMLElement | null;
+      }
+    } else {
+      let firstCard = trackElement.firstElementChild as HTMLElement | null;
+      while (firstCard) {
+        const firstWidth = firstCard.getBoundingClientRect().width;
+        if (-offsetX < firstWidth) break;
+        offsetX += firstWidth;
+        trackElement.appendChild(firstCard);
+        firstCard = trackElement.firstElementChild as HTMLElement | null;
+      }
+    }
+
+    trackElement.style.transform = `translateX(${offsetX}px)`;
+    animationFrame = requestAnimationFrame(animateTrack);
+  };
+
+  const restartAnimation = async () => {
+    stopAnimation();
+    await tick();
+    updateCycleWidth();
+    resetTrack();
+
+    if (trackElement && shouldAnimate && cycleWidth > 0) {
+      animationFrame = requestAnimationFrame(animateTrack);
+    }
+  };
+
   $: photoQueue = normalizePhotos(photos);
-  $: loopPhotos = [...photoQueue, ...photoQueue];
   $: shouldAnimate = photoQueue.length > visibleCount;
-  $: renderedPhotos = shouldAnimate ? loopPhotos : photoQueue;
   $: cardWidth = getCardWidth(Math.min(visibleCount, photoQueue.length || 1));
   $: animationDuration = Math.max(12, (photoQueue.length * PHOTO_ANIMATION_UNIT) / photoSpeed);
+  $: restartAnimation();
 
   onMount(() => {
     updateCarouselMetrics();
+    restartAnimation();
     window.addEventListener('resize', updateCarouselMetrics);
+
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => {
+            updateCycleWidth();
+          })
+        : null;
+
+    if (resizeObserver && trackElement) {
+      resizeObserver.observe(trackElement);
+    }
+
     return () => {
       window.removeEventListener('resize', updateCarouselMetrics);
+      resizeObserver?.disconnect();
+      stopAnimation();
     };
   });
 </script>
 
 {#if photoQueue.length > 0}
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-3">
-    <div
-      class={`google-photo-track flex ${reverseDirection ? 'reverse-direction' : ''} ${shouldAnimate ? 'is-animated' : ''}`}
-      style={`--google-photo-duration: ${animationDuration}s; --google-photo-speed: ${photoSpeed}; --google-photo-width: ${cardWidth};`}
-    >
-      {#each renderedPhotos as photo}
+    <div bind:this={trackElement} class="google-photo-track flex" style={`--google-photo-width: ${cardWidth};`}>
+      {#each photoQueue as photo}
         <figure
           class="google-photo-card flex-shrink-0 p-2"
-          style="width: var(--google-photo-width); max-width: 360px;"
+          style="width: auto; max-width: min(360px, var(--google-photo-width));"
         >
           <img
-            class="h-full w-full rounded-xl object-cover shadow-lg shadow-black/30"
+            class="h-auto max-h-[18rem] w-auto max-w-full rounded-xl object-contain shadow-lg shadow-black/30"
             src={photo.src}
             alt={photo.alt ?? ''}
             loading="lazy"
@@ -101,31 +189,6 @@
 <style>
   .google-photo-track {
     will-change: transform;
-    animation: none;
-    animation-direction: normal;
-    --google-photo-distance: -50%;
-  }
-
-  .google-photo-track.is-animated {
-    animation: google-photo-marquee calc(var(--google-photo-duration, 24s) / var(--google-photo-speed, 1)) linear infinite;
-    animation-timing-function: linear;
-  }
-
-  .google-photo-track.reverse-direction {
-    --google-photo-distance: 50%;
-  }
-
-  .google-photo-card {
-    aspect-ratio: 16 / 10;
-  }
-
-  @keyframes google-photo-marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(var(--google-photo-distance));
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

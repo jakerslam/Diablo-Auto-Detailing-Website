@@ -9,6 +9,7 @@
     googleReviews,
     businessProfile
   } from '$lib/data/site-data';
+  import vehicleMakes from '$lib/data/vehicle-makes.json';
   import type { LeadFormValues, PlanType } from '$lib/types/form';
   import { emptyLeadForm } from '$lib/types/form';
 
@@ -56,6 +57,7 @@
   let reviewItems: ReviewData[] = googleReviews;
   let photoItems: { src: string; alt?: string }[] = [];
   let showFloatingQuote = true;
+  let pulseQuoteCta = false;
   const googlePlaceId = import.meta.env.PUBLIC_GOOGLE_PLACE_ID || '';
   const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
@@ -119,15 +121,19 @@
     return rect.top < window.innerHeight && rect.bottom > 0;
   };
 
-  function updateFloatingQuoteVisibility() {
+  function updateQuoteCtaState() {
     if (typeof window === 'undefined') return;
+
+    const heroInView = isElementInViewport('hero');
+    const quoteInView = isElementInViewport('quote');
+    const topbarInView = isElementInViewport('topbar');
+    pulseQuoteCta = !heroInView && !quoteInView;
+
     if (window.innerWidth > 768) {
       showFloatingQuote = true;
       return;
     }
 
-    const quoteInView = isElementInViewport('quote');
-    const topbarInView = isElementInViewport('topbar');
     showFloatingQuote = !(quoteInView || topbarInView);
   }
 
@@ -233,9 +239,9 @@
         );
       }
 
-      updateFloatingQuoteVisibility();
-      window.addEventListener('scroll', updateFloatingQuoteVisibility, { passive: true });
-      window.addEventListener('resize', updateFloatingQuoteVisibility);
+      updateQuoteCtaState();
+      window.addEventListener('scroll', updateQuoteCtaState, { passive: true });
+      window.addEventListener('resize', updateQuoteCtaState);
     }
 
     const base = import.meta.env.BASE_URL || '/';
@@ -293,13 +299,13 @@
       photoItems = buildReviewPhotoItems(googleReviews);
     }
 
-    updateFloatingQuoteVisibility();
+    updateQuoteCtaState();
   });
 
   onDestroy(() => {
     if (typeof window === 'undefined') return;
-    window.removeEventListener('scroll', updateFloatingQuoteVisibility);
-    window.removeEventListener('resize', updateFloatingQuoteVisibility);
+    window.removeEventListener('scroll', updateQuoteCtaState);
+    window.removeEventListener('resize', updateQuoteCtaState);
   });
 
   const ghlFormEndpoint =
@@ -307,6 +313,7 @@
   const ghlFormConfigured = Boolean(ghlFormEndpoint && !ghlFormEndpoint.includes('example.com'));
 
   const planIds = servicePlans.map((plan) => plan.id);
+  const planOptions = servicePlans.map((plan) => ({ value: plan.id, label: plan.name }));
 
   const baseInclusions = [
     'Interior detailing + carpet shampooing',
@@ -452,7 +459,7 @@
           FAQ
         </a>
       </nav>
-      <Button variant="outline" href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'header_cta', false)}>Request Quote</Button>
+      <Button className={pulseQuoteCta ? 'diablo-cta-pulse' : ''} variant="outline" href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'header_cta', false)}>Request Quote</Button>
     </div>
     <p class="mx-auto max-w-6xl pb-2 px-4 text-center text-sm text-white/65 sm:px-6 lg:px-8">
       Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
@@ -693,29 +700,50 @@
           <FormField id="email" label="Email" required>
             <Input id="email" name="email" type="email" bind:value={form.email} required />
           </FormField>
-          <FormField id="city_or_zip" label="City or ZIP" required>
-            <Input id="city_or_zip" name="city_or_zip" bind:value={form.city} required />
-          </FormField>
-          <FormField id="zip" label="ZIP" required>
-            <Input id="zip" name="zip" bind:value={form.zip} required />
+          <FormField id="address" label="Full address" required className="md:col-span-2">
+            <Input
+              id="address"
+              name="address"
+              bind:value={form.address}
+              placeholder="Street address, city, state, ZIP"
+              autocomplete="street-address"
+              required
+            />
           </FormField>
           <FormField id="vehicle_year" label="Vehicle year" required>
             <Input id="vehicle_year" name="vehicle_year" bind:value={form.vehicleYear} required />
           </FormField>
           <FormField id="vehicle_make" label="Vehicle make" required>
-            <Input id="vehicle_make" name="vehicle_make" bind:value={form.vehicleMake} required />
+            <Input
+              id="vehicle_make"
+              name="vehicle_make"
+              bind:value={form.vehicleMake}
+              list="vehicle-make-options"
+              placeholder="Start typing your make"
+              autocomplete="off"
+              required
+            />
+            <datalist id="vehicle-make-options">
+              {#each vehicleMakes as make}
+                <option value={make}></option>
+              {/each}
+            </datalist>
           </FormField>
           <FormField id="vehicle_model" label="Vehicle model" required>
             <Input id="vehicle_model" name="vehicle_model" bind:value={form.vehicleModel} required />
           </FormField>
-          <FormField id="preferred_window" label="Preferred date window" required>
-            <Input id="preferred_window" name="preferred_window" bind:value={form.preferredWindow} required />
+          <FormField id="preferred_window" label="Preferred date window" className="md:col-span-2">
+            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+              <Input id="preferred_start_date" name="preferred_start_date" type="date" bind:value={form.preferredStartDate} />
+              <span class="text-sm text-[color:var(--text-muted)]">to</span>
+              <Input id="preferred_end_date" name="preferred_end_date" type="date" bind:value={form.preferredEndDate} min={form.preferredStartDate} />
+            </div>
           </FormField>
 
-          <FormField id="plan" label="Plan" required className="md:col-span-2">
+          <FormField id="plan" label="Frequency" required className="md:col-span-2">
             <Select id="plan" name="plan" bind:value={form.plan}>
-              {#each planIds as planId}
-                <option value={planId}>{planId}</option>
+              {#each planOptions as plan}
+                <option value={plan.value}>{plan.label}</option>
               {/each}
             </Select>
           </FormField>
@@ -731,12 +759,12 @@
           </FormField>
 
           <FormField id="best_contact_time" label="Best time to contact" className="md:col-span-2">
-            <Input
-              id="best_contact_time"
-              name="best_contact_time"
-              bind:value={form.bestContactTime}
-              placeholder="Any preferences"
-            />
+            <Select id="best_contact_time" name="best_contact_time" bind:value={form.bestContactTime}>
+              <option value="">Select a time</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+            </Select>
           </FormField>
 
           <fieldset class="md:col-span-2">
@@ -819,7 +847,7 @@
   <a
     href="#quote"
     on:click={(event) => onSectionNav(event, 'quote', 'floating_mobile_cta', false)}
-    class={`fixed bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-glow-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg ${showFloatingQuote ? '' : 'hidden'} md:hidden`}
+    class={`fixed bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-glow-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg ${showFloatingQuote ? '' : 'hidden'} ${pulseQuoteCta ? 'diablo-cta-pulse' : ''} md:hidden`}
   >
     Get Quote
   </a>

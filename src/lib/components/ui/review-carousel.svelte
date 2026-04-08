@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
 
   type Review = {
     name: string;
@@ -16,12 +16,15 @@
 
   let visibleCount = 1;
   let reviewQueue: Review[] = [];
-  let loopReviews: Review[] = [];
-  let renderedReviews: Review[] = [];
   let cardWidth = '100%';
   let animationDuration = 26;
   let reviewSpeed = 1;
   let shouldAnimate = false;
+  let cycleWidth = 0;
+  let trackElement: HTMLDivElement | null = null;
+  let animationFrame = 0;
+  let lastTimestamp = 0;
+  let offsetX = 0;
 
   const starRow = (rating: number) => '★'.repeat(Math.max(0, Math.min(5, rating)));
 
@@ -71,27 +74,103 @@
     reviewSpeed = getReviewSpeed();
   };
 
+  const updateCycleWidth = () => {
+    if (!trackElement || !shouldAnimate) {
+      cycleWidth = 0;
+      return;
+    }
+
+    cycleWidth = trackElement.scrollWidth;
+  };
+
+  const stopAnimation = () => {
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+    lastTimestamp = 0;
+  };
+
+  const resetTrack = () => {
+    offsetX = 0;
+    if (trackElement) {
+      trackElement.style.transform = 'translateX(0px)';
+    }
+  };
+
+  const animateTrack = (timestamp: number) => {
+    if (!trackElement || !shouldAnimate || cycleWidth <= 0) {
+      stopAnimation();
+      return;
+    }
+
+    if (!lastTimestamp) {
+      lastTimestamp = timestamp;
+    }
+
+    const deltaMs = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+    const pixelsPerMs = cycleWidth / (Math.max(animationDuration, 12) * 1000);
+    offsetX -= deltaMs * pixelsPerMs;
+
+    let firstCard = trackElement.firstElementChild as HTMLElement | null;
+    while (firstCard) {
+      const firstWidth = firstCard.getBoundingClientRect().width;
+      if (-offsetX < firstWidth) break;
+      offsetX += firstWidth;
+      trackElement.appendChild(firstCard);
+      firstCard = trackElement.firstElementChild as HTMLElement | null;
+    }
+
+    trackElement.style.transform = `translateX(${offsetX}px)`;
+    animationFrame = requestAnimationFrame(animateTrack);
+  };
+
+  const restartAnimation = async () => {
+    stopAnimation();
+    await tick();
+    updateCycleWidth();
+    resetTrack();
+
+    if (trackElement && shouldAnimate && cycleWidth > 0) {
+      animationFrame = requestAnimationFrame(animateTrack);
+    }
+  };
+
   $: reviewQueue = buildReviewQueue(reviews);
-  $: loopReviews = [...reviewQueue, ...reviewQueue];
   $: shouldAnimate = reviewQueue.length > visibleCount;
-  $: renderedReviews = shouldAnimate ? loopReviews : reviewQueue;
   $: cardWidth = getCardWidth(Math.min(visibleCount, reviewQueue.length || 1));
   $: animationDuration = Math.max(12, (reviewQueue.length * REVIEW_ANIMATION_UNIT) / reviewSpeed);
+  $: restartAnimation();
 
   onMount(() => {
     updateCarouselMetrics();
+    restartAnimation();
     window.addEventListener('resize', updateCarouselMetrics);
+
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => {
+            updateCycleWidth();
+          })
+        : null;
+
+    if (resizeObserver && trackElement) {
+      resizeObserver.observe(trackElement);
+    }
 
     return () => {
       window.removeEventListener('resize', updateCarouselMetrics);
+      resizeObserver?.disconnect();
+      stopAnimation();
     };
   });
 </script>
 
 {#if reviewQueue.length > 0}
     <div class="relative min-h-[18rem] overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4 md:min-h-0">
-      <div class={`reviews-track flex ${shouldAnimate ? 'is-animated' : ''}`} style={`--review-duration: ${animationDuration}s; --review-speed: ${reviewSpeed};`}>
-        {#each renderedReviews as review}
+      <div bind:this={trackElement} class="reviews-track flex">
+        {#each reviewQueue as review}
           <article
             class="reviews-card flex-shrink-0 h-full p-2"
             style={`width: ${cardWidth}; max-width: 360px;`}
@@ -117,21 +196,6 @@
 <style>
   .reviews-track {
     will-change: transform;
-  }
-
-  .reviews-track.is-animated {
-    animation: review-marquee calc(var(--review-duration, 26s) / var(--review-speed, 1)) linear infinite;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-
-  @keyframes review-marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
   }
 
   .review-text {

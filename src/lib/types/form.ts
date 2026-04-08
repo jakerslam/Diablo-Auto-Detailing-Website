@@ -5,13 +5,13 @@ export type LeadFormValues = {
   lastName: string;
   phone: string;
   email: string;
-  city: string;
-  zip: string;
+  address: string;
   vehicleYear: string;
   vehicleMake: string;
   vehicleModel: string;
   plan: PlanType;
-  preferredWindow: string;
+  preferredStartDate: string;
+  preferredEndDate: string;
   message: string;
   bestContactTime: string;
   includeCeramicWax: boolean;
@@ -26,13 +26,13 @@ export const emptyLeadForm: LeadFormValues = {
   lastName: '',
   phone: '',
   email: '',
-  city: '',
-  zip: '',
+  address: '',
   vehicleYear: '',
   vehicleMake: '',
   vehicleModel: '',
-  plan: 'one-time',
-  preferredWindow: '',
+  plan: 'quarterly',
+  preferredStartDate: '',
+  preferredEndDate: '',
   message: '',
   bestContactTime: '',
   includeCeramicWax: true,
