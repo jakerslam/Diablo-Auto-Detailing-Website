@@ -4,7 +4,7 @@ Single page SvelteKit site for Diablo Auto Detailing.
 
 ## Live site
 
-- [Diablo Auto Detailing App](https://jakerslam.github.io/Diablo-Auto-Detailing-Website/index.html)
+- [Diablo Auto Detailing App](https://jakerslam.github.io/Diablo-Auto-Detailing-Website)
 
 ## Stack
 
