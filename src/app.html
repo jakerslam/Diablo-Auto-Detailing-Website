@@ -3,6 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        if (typeof window === 'undefined') return;
+
+        var customDomain = 'diabloautodetailing.com';
+        var fallbackBase = 'https://jakerslam.github.io/Diablo-Auto-Detailing-Website';
+
+        if (window.location.hostname !== customDomain) return;
+        if (window.location.search.indexOf('fallback=github') !== -1) return;
+
+        setTimeout(function () {
+          var root = document.querySelector('div.relative');
+          var hasContent = !!(root && root.children.length > 0);
+          var hasHeadStyles = document.querySelectorAll('link[rel="stylesheet"]').length > 0;
+
+          if (!hasContent || !hasHeadStyles) {
+            var target = fallbackBase + (window.location.pathname || '/');
+            var marker = window.location.search ? '&' : '?';
+            window.location.replace(target + window.location.search + marker + 'fallback=github' + window.location.hash);
+          }
+        }, 1500);
+      })();
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover" class="bg-steel-900 text-white">
