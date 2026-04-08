@@ -65,7 +65,7 @@
 
   $: reviewQueue = buildReviewQueue(reviews);
   $: loopReviews = [...reviewQueue, ...reviewQueue];
-  $: animationDuration = Math.max(18, reviewQueue.length * 1.2);
+  $: animationDuration = Math.max(12, reviewQueue.length * 0.8);
 
   onMount(() => {
     updateCarouselMetrics();
