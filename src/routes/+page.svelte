@@ -118,6 +118,15 @@
     }
   ];
 
+  const getPlanBadge = (planId: PlanType) => {
+    if (planId === 'quarterly') return 'Most popular';
+    if (planId === 'monthly') return 'Best rate';
+    return 'Try us out';
+  };
+
+  const getListPrice = (recommendedPrice: number, discount?: number) =>
+    discount ? recommendedPrice + discount : recommendedPrice;
+
   function trackEvent(eventName: string, detail: Record<string, string | number | boolean>) {
     if (typeof window === 'undefined') return;
 
@@ -306,11 +315,11 @@
             className={`h-full flex flex-col ${index === servicePlans.length - 1 ? 'border-glow-400/50' : ''}`}
           >
             <CardHeader>
+              <div class="mb-2">
+                <Badge className="bg-white/85">{getPlanBadge(plan.id)}</Badge>
+              </div>
               <div class="mb-2 flex items-center justify-between gap-2">
                 <CardTitle>{plan.name}</CardTitle>
-                {#if plan.badge}
-                  <Badge>{plan.badge}</Badge>
-                {/if}
               </div>
               <CardDescription>{plan.description}</CardDescription>
             </CardHeader>
@@ -318,7 +327,14 @@
               <dl class="mt-4 space-y-2 text-sm text-white/80">
                 <div class="flex justify-between border-b border-white/10 pb-2">
                   <dt>Maximum rate</dt>
-                  <dd class="font-semibold">${plan.recommendedPrice}</dd>
+                  {#if plan.discount}
+                    <dd class="flex items-center gap-2 font-semibold">
+                      <span class="text-sm text-red-400 line-through">${getListPrice(plan.recommendedPrice, plan.discount)}</span>
+                      <span>${plan.recommendedPrice}</span>
+                    </dd>
+                  {:else}
+                    <dd class="font-semibold">${plan.recommendedPrice}</dd>
+                  {/if}
                 </div>
                 <div class="flex justify-between pb-2">
                   <dt>Frequency</dt>
@@ -354,9 +370,9 @@
 
     <section id="how" class="grid gap-6 md:grid-cols-1">
       <Card className="diablo-surface">
-        <CardHeader>
-          <CardTitle>How it works</CardTitle>
-          <CardDescription>Four step process used by our service team.</CardDescription>
+        <CardHeader className="items-center text-center">
+          <CardTitle className="w-full">How it works</CardTitle>
+          <CardDescription className="w-full">Four step process used by our service team.</CardDescription>
         </CardHeader>
         <CardContent>
           <ol class="mt-2 space-y-4 text-white/80">
