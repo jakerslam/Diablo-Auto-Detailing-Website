@@ -18,6 +18,21 @@
 
   const starRow = (rating: number) => '★'.repeat(Math.max(0, Math.min(5, rating)));
 
+  const formatReviewerName = (fullName: string) => {
+    const parts = fullName
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (parts.length === 0) return '';
+    if (parts.length === 1) return parts[0];
+
+    const firstName = parts[0];
+    const lastName = parts[parts.length - 1];
+    const lastInitial = lastName.charAt(0).toUpperCase();
+    return `${firstName} ${lastInitial}.`;
+  };
+
   onMount(() => {
     if (total <= 1) return;
 
@@ -49,8 +64,11 @@
       >
         <p class="text-sm leading-relaxed text-white/90">“{reviews[currentIndex].text}”</p>
         <div>
-          <p class="text-sm font-semibold text-white/95">{reviews[currentIndex].name}</p>
-          <p class="mt-1 text-xs font-semibold text-amber-400">{starRow(reviews[currentIndex].rating)} {reviews[currentIndex].date}</p>
+          <p class="text-sm font-semibold text-white/95">{formatReviewerName(reviews[currentIndex].name)}</p>
+          <p class="mt-1 text-xs font-semibold text-white/80">
+            <span class="text-amber-400">{starRow(reviews[currentIndex].rating)}</span>
+            <span class="ml-1">{reviews[currentIndex].date}</span>
+          </p>
         </div>
       </article>
     {/key}
