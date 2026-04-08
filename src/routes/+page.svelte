@@ -312,9 +312,8 @@
       <Card className="diablo-surface">
         <CardHeader>
           <div class="flex flex-col gap-1">
-            <CardTitle>Google reviews (5★)</CardTitle>
+            <CardTitle>Reviews from satisfied customers</CardTitle>
             <CardDescription>
-              5-star feedback pulled from Google listing and auto-rotated every few seconds.
               <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="ml-1 text-glow-300 underline">
                 View live Google profile
               </a>
