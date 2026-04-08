@@ -11,7 +11,7 @@
 
   const MAX_PHOTOS = 20;
   const PHOTO_ANIMATION_UNIT = 0.8;
-  const MOBILE_PHOTO_SPEED_MULTIPLIER = 2;
+  const MOBILE_PHOTO_SPEED_MULTIPLIER = 3;
 
   let visibleCount = 1;
   let photoQueue: Photo[] = [];

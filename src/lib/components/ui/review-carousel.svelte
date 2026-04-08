@@ -12,7 +12,7 @@
 
   const MAX_QUEUE_SIZE = 30;
   const REVIEW_ANIMATION_UNIT = 0.8;
-  const MOBILE_REVIEW_SPEED_MULTIPLIER = 2;
+  const MOBILE_REVIEW_SPEED_MULTIPLIER = 3;
 
   let visibleCount = 1;
   let reviewQueue: Review[] = [];

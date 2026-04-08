@@ -42,6 +42,11 @@
     photoAlt?: string;
     image?: string;
     imageUrl?: string;
+    photos?: unknown[];
+    photoUrls?: unknown[];
+    images?: unknown[];
+    imageUrls?: unknown[];
+    media?: unknown[];
   };
 
   let form: LeadFormValues = {
@@ -95,25 +100,60 @@
 
   const buildReviewPhotoItems = (reviews: ReviewData[]) => {
     const uniquePhotos = new Set<string>();
+    const normalizePhotoEntry = (entry: unknown) => {
+      if (typeof entry === 'string') {
+        return entry.trim();
+      }
+
+      if (entry && typeof entry === 'object') {
+        const candidate = entry as {
+          url?: string;
+          src?: string;
+          photo?: string;
+          photoUrl?: string;
+          image?: string;
+          imageUrl?: string;
+        };
+
+        return (
+          candidate.url?.trim() ||
+          candidate.src?.trim() ||
+          candidate.photo?.trim() ||
+          candidate.photoUrl?.trim() ||
+          candidate.image?.trim() ||
+          candidate.imageUrl?.trim() ||
+          ''
+        );
+      }
+
+      return '';
+    };
 
     return reviews
-      .map((review) => {
-        const src =
-          review.photo?.trim() ||
-          review.photoUrl?.trim() ||
-          review.image?.trim() ||
-          review.imageUrl?.trim() ||
-          '';
+      .flatMap((review) => {
+        const photoCandidates = [
+          review.photo,
+          review.photoUrl,
+          review.image,
+          review.imageUrl,
+          ...(Array.isArray(review.photos) ? review.photos : []),
+          ...(Array.isArray(review.photoUrls) ? review.photoUrls : []),
+          ...(Array.isArray(review.images) ? review.images : []),
+          ...(Array.isArray(review.imageUrls) ? review.imageUrls : []),
+          ...(Array.isArray(review.media) ? review.media : [])
+        ];
 
-        if (!src || uniquePhotos.has(src)) return null;
-        uniquePhotos.add(src);
-
-        return {
-          src,
-          alt: review.photoAlt || `${review.name} review photo`
-        };
+        return photoCandidates
+          .map(normalizePhotoEntry)
+          .filter((src) => src && !uniquePhotos.has(src))
+          .map((src) => {
+            uniquePhotos.add(src);
+            return {
+              src,
+              alt: review.photoAlt || `${review.name} review photo`
+            };
+          });
       })
-      .filter((photo): photo is { src: string; alt?: string } => Boolean(photo))
       .slice(0, 20);
   };
 
@@ -132,7 +172,12 @@
           photoUrl: String(candidate?.photoUrl || '').trim(),
           photoAlt: String(candidate?.photoAlt || '').trim(),
           image: String(candidate?.image || '').trim(),
-          imageUrl: String(candidate?.imageUrl || '').trim()
+          imageUrl: String(candidate?.imageUrl || '').trim(),
+          photos: Array.isArray(candidate?.photos) ? candidate.photos : [],
+          photoUrls: Array.isArray(candidate?.photoUrls) ? candidate.photoUrls : [],
+          images: Array.isArray(candidate?.images) ? candidate.images : [],
+          imageUrls: Array.isArray(candidate?.imageUrls) ? candidate.imageUrls : [],
+          media: Array.isArray(candidate?.media) ? candidate.media : []
         };
       })
       .filter((review) => review.name && review.text && review.rating > 0);
@@ -406,11 +451,15 @@
         </CardHeader>
         <CardContent>
           <ReviewCarousel reviews={reviewItems} />
-          {#if photoItems.length > 0}
-            <div class="mt-5">
-            <GooglePhotoCarousel photos={photoItems} reverseDirection={true} />
-            </div>
-          {/if}
+          <div class="mt-5">
+            {#if photoItems.length > 0}
+              <GooglePhotoCarousel photos={photoItems} reverseDirection={true} />
+            {:else}
+              <div class="rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-5 text-center text-sm text-[color:var(--text-muted)]">
+                Review and Google profile photos will appear here as soon as image URLs are available in the feed.
+              </div>
+            {/if}
+          </div>
         </CardContent>
       </Card>
     </section>
@@ -420,7 +469,7 @@
         <Card className="diablo-surface">
           <CardHeader>
             <CardTitle>{reason.title}</CardTitle>
-            <CardDescription className="text-[color:var(--text-muted)]">{reason.description}</CardDescription>
+            <CardDescription className="text-white/80">{reason.description}</CardDescription>
           </CardHeader>
         </Card>
       {/each}
@@ -433,13 +482,13 @@
         <p class="diablo-subtitle mt-2">Transparent scope, no extra upsells during the visit.</p>
       </div>
       <div class="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="sub-card">
           <CardHeader>
             <CardTitle>Included in all plans</CardTitle>
-            <CardDescription className="text-[color:var(--text-muted)]">Full detail baseline for one-time, monthly, and quarterly customers.</CardDescription>
+            <CardDescription className="text-white/80">Full detail baseline for one-time, monthly, and quarterly customers.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul class="mt-1 space-y-3 text-[color:var(--text-muted)]">
+            <ul class="mt-1 space-y-3 text-white">
               {#each baseInclusions as item}
                 <li class="flex items-start gap-2">
                   <span class="mt-1.5 h-2 w-2 rounded-full bg-wash-400"></span>
@@ -449,15 +498,15 @@
             </ul>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="sub-card">
           <CardHeader>
             <CardTitle>Service area coverage</CardTitle>
-              <CardDescription className="text-[color:var(--text-muted)]">We come to Walnut Creek and nearby communities.</CardDescription>
+              <CardDescription className="text-white/80">We come to Walnut Creek and nearby communities.</CardDescription>
           </CardHeader>
           <CardContent>
             <div class="mt-2 flex flex-wrap gap-2">
               {#each serviceAreas as city}
-                <span class="rounded-full border border-white/20 px-3 py-1 text-xs text-[color:var(--text-primary)]">{city}</span>
+                <span class="rounded-full border border-white/20 px-3 py-1 text-xs text-white">{city}</span>
               {/each}
             </div>
           </CardContent>
@@ -477,7 +526,7 @@
       <div class="grid items-stretch gap-5 md:grid-cols-3">
         {#each servicePlans as plan, index}
           <Card
-            className={`h-full flex flex-col ${index === servicePlans.length - 1 ? 'border-glow-400/50' : ''}`}
+            className={`h-full flex flex-col text-white ${index === servicePlans.length - 1 ? 'border-glow-400/50' : ''}`}
           >
             <CardHeader>
               <div class="mb-2">
@@ -486,10 +535,10 @@
               <div class="mb-2 flex items-center justify-between gap-2">
                 <CardTitle>{plan.name}</CardTitle>
               </div>
-              <CardDescription>{plan.description}</CardDescription>
+              <CardDescription className="text-white/80">{plan.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
-              <dl class="mt-4 space-y-2 text-sm text-[color:var(--text-primary)]">
+              <dl class="mt-4 space-y-2 text-sm text-white">
                 <div class="flex justify-between border-b border-white/10 pb-2">
                   <dt>Maximum rate</dt>
                   {#if plan.discount}
@@ -506,7 +555,7 @@
                   <dd>{plan.recurringText}</dd>
                 </div>
               </dl>
-              <ul class="mt-3 flex-1 space-y-2 text-sm">
+              <ul class="mt-3 flex-1 space-y-2 text-sm text-white">
                 {#each plan.includedFeatures as feature}
                   <li class="flex items-start gap-2">
                     <span class="mt-1 h-2 w-2 rounded-full bg-glow-400"></span>
