@@ -57,6 +57,20 @@
   };
 
   onMount(async () => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      if (window.location.hash) {
+        window.history.replaceState(
+          null,
+          '',
+          `${window.location.pathname}${window.location.search}`
+        );
+      }
+    }
+
     const base = import.meta.env.BASE_URL || '/';
     const normalizedBase = base.endsWith('/') ? base : `${base}/`;
 
