@@ -138,6 +138,27 @@
     trackEvent('quote_intent', { source: 'button_click', label });
   }
 
+  function scrollSectionToBottom(sectionId: string) {
+    if (typeof window === 'undefined') return;
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const sectionRect = section.getBoundingClientRect();
+    const targetY = sectionRect.top + window.scrollY + sectionRect.height - window.innerHeight;
+    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+    window.scrollTo({
+      top: Math.min(Math.max(0, targetY), maxY),
+      behavior: 'smooth'
+    });
+  }
+
+  function onSectionNav(event: MouseEvent, sectionId: string, trackingLabel: string) {
+    event.preventDefault();
+    onQuoteIntent(trackingLabel);
+    scrollSectionToBottom(sectionId);
+  }
+
   function setPlan(plan: PlanType) {
     form.plan = plan;
     onQuoteIntent(`plan_selected_${plan}`);
@@ -156,7 +177,7 @@
 <div class="diablo-page flex min-h-screen flex-col">
   <header class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
-      <a href="#top" class="group inline-flex items-center gap-3">
+      <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top')} class="group inline-flex items-center gap-3">
         <span
           class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/25"
         >
@@ -168,20 +189,20 @@
         </div>
       </a>
       <nav class="flex items-center gap-2 text-sm text-white/85">
-        <a href="#plans" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_plans')}>
+        <a href="#plans" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'plans', 'nav_plans')}>
           Plans
         </a>
-        <a href="#how" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_how')}>
+        <a href="#how" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'how', 'nav_how')}>
           Process
         </a>
-        <a href="#reviews" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_reviews')}>
+        <a href="#reviews" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'reviews', 'nav_reviews')}>
           Reviews
         </a>
-        <a href="#faq" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_faq')}>
+        <a href="#faq" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'faq', 'nav_faq')}>
           FAQ
         </a>
       </nav>
-      <Button variant="outline" href="#quote" on:click={() => onQuoteIntent('header_cta')}>Request Quote</Button>
+      <Button variant="outline" href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'header_cta')}>Request Quote</Button>
     </div>
     <p class="mx-auto max-w-6xl pb-2 px-4 text-center text-sm text-white/65 sm:px-6 lg:px-8">
       Need same-day help? Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
@@ -201,8 +222,8 @@
             interior detailing, wheel cleaning, and a complimentary ceramic wax finish.
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#quote" on:click={() => onQuoteIntent('hero_cta')}>Get My Quote</Button>
-            <Button variant="outline" href="#plans" on:click={() => onQuoteIntent('hero_plans')}>Compare Plans</Button>
+            <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta')}>Get My Quote</Button>
+            <Button variant="outline" href="#plans" on:click={(event) => onSectionNav(event, 'plans', 'hero_plans')}>Compare Plans</Button>
           </div>
         </div>
         <div class="grid gap-3">
@@ -313,7 +334,7 @@
                 variant="outline"
                 on:click={() => {
                   setPlan(plan.id);
-                  document.getElementById('quote')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  scrollSectionToBottom('quote');
                 }}
               >
                 Pick {plan.name}
@@ -507,11 +528,11 @@
         <div>
           <p class="mb-3 text-white/80">Quick Links</p>
           <nav class="flex flex-wrap gap-3 text-white/75">
-            <a href="#plans" class="hover:text-glow-300">Plans</a>
-            <a href="#how" class="hover:text-glow-300">Process</a>
-            <a href="#reviews" class="hover:text-glow-300">Reviews</a>
-            <a href="#faq" class="hover:text-glow-300">FAQ</a>
-            <a href="#quote" class="hover:text-glow-300">Request Quote</a>
+            <a href="#plans" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'plans', 'footer_plans')}>Plans</a>
+            <a href="#how" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'how', 'footer_how')}>Process</a>
+            <a href="#reviews" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'reviews', 'footer_reviews')}>Reviews</a>
+            <a href="#faq" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'faq', 'footer_faq')}>FAQ</a>
+            <a href="#quote" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'quote', 'footer_quote')}>Request Quote</a>
           </nav>
         </div>
         <div>
@@ -537,7 +558,7 @@
 
   <a
     href="#quote"
-    on:click={() => onQuoteIntent('floating_mobile_cta')}
+    on:click={(event) => onSectionNav(event, 'quote', 'floating_mobile_cta')}
     class="fixed bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-glow-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg md:hidden"
   >
     Get Quote
