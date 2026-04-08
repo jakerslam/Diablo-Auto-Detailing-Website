@@ -51,6 +51,31 @@
     .slice(0, 20)
     .map((photo) => ({ src: photo.url, alt: photo.alt }));
   let showFloatingQuote = true;
+  const googlePlaceId = import.meta.env.PUBLIC_GOOGLE_PLACE_ID || '';
+  const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || '';
+
+  const fallbackPhotoItems = () =>
+    googlePhotos
+      .slice(0, 20)
+      .map((photo) => ({ src: photo.url, alt: photo.alt }));
+
+  const mapPhotoReference = (photoRef: string, index: number) => ({
+    src: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=${encodeURIComponent(photoRef)}&key=${googleMapsApiKey}`,
+    alt: `Business photo ${index + 1}`
+  });
+
+  const sanitizePhotoItems = (input: unknown) => {
+    if (!Array.isArray(input)) return [];
+
+    return input
+      .map((item, index) => {
+        const candidate = item as { photo_reference?: string };
+        const photoRef = String(candidate?.photo_reference || '').trim();
+        if (!photoRef) return null;
+        return mapPhotoReference(photoRef, index);
+      })
+      .filter((photo): photo is { src: string; alt?: string } => Boolean(photo));
+  };
 
   const isElementInViewport = (id: string) => {
     if (typeof window === 'undefined') return false;
@@ -116,7 +141,25 @@
     const base = import.meta.env.BASE_URL || '/';
     const normalizedBase = base.endsWith('/') ? base : `${base}/`;
 
+    const loadGooglePhotoFeed = async () => {
+      if (!googlePlaceId || !googleMapsApiKey) return;
+
+      const encodedPlaceId = encodeURIComponent(googlePlaceId);
+      const endpoint = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodedPlaceId}&fields=photos&key=${googleMapsApiKey}`;
+      const response = await fetch(endpoint);
+      if (!response.ok) return;
+
+      const payload = await response.json();
+      if (payload?.status !== 'OK' || !payload?.result?.photos) return;
+
+      const loadedPhotos = sanitizePhotoItems(payload.result.photos).slice(0, 20);
+      if (loadedPhotos.length > 0) {
+        photoItems = loadedPhotos;
+      }
+    };
+
     try {
+      await loadGooglePhotoFeed();
       const response = await fetch(`${normalizedBase}reviews.json`);
       if (!response.ok) return;
 
@@ -131,15 +174,13 @@
             alt: review.photoAlt || `${review.name} review photo`
           }));
 
-        if (loadedPhotos.length > 0) {
+        if (photoItems.length === 20 && loadedPhotos.length > 0) {
           photoItems = loadedPhotos.slice(0, 20);
         }
       }
     } catch {
       reviewItems = googleReviews;
-      photoItems = googlePhotos
-        .slice(0, 20)
-        .map((photo) => ({ src: photo.url, alt: photo.alt }));
+      photoItems = fallbackPhotoItems();
     }
 
     updateFloatingQuoteVisibility();
