@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --bg: #0c1626;
+    --surface: #101f36;
+    --surface-soft: #1a2b46;
+    --stroke: rgba(255, 255, 255, 0.15);
+  }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 10% 20%, rgba(141, 208, 247, 0.08), transparent 40%),
+      radial-gradient(circle at 85% 0%, rgba(241, 154, 36, 0.12), transparent 35%),
+      radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.05), transparent 45%),
+      var(--bg);
+    min-height: 100vh;
+    font-family: 'Manrope', Inter, system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: 'Inter Tight', 'Avenir Next', 'Segoe UI', sans-serif;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold transition;
+  }
+
+  .btn-primary {
+    @apply btn bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/30 hover:brightness-110;
+  }
+
+  .btn-secondary {
+    @apply btn border border-white/30 bg-white/10 text-white hover:bg-white/20;
+  }
+}
