@@ -40,6 +40,7 @@ jobs:
           PUBLIC_GHL_FORM_ENDPOINT: ${{ secrets.PUBLIC_GHL_FORM_ENDPOINT }}
           NODE_ENV: production
           GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_PAGES: true
         run: npm run build
 
       - name: Setup Pages

@@ -2,7 +2,8 @@ import adapter from '@sveltejs/adapter-static';
 
 const repository = process.env.GITHUB_REPOSITORY || '';
 const repositoryName = repository.includes('/') ? repository.split('/')[1] : '';
-const basePath = process.env.NODE_ENV === 'production' && repositoryName ? `/${repositoryName}` : '';
+const isGitHubPages = process.env.GITHUB_PAGES === 'true' && repositoryName;
+const basePath = isGitHubPages ? `/${repositoryName}` : '';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
