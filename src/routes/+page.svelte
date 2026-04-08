@@ -327,7 +327,7 @@
       </p>
     </section>
 
-    <section id="how" class="grid gap-6 md:grid-cols-2">
+    <section id="how" class="grid gap-6 md:grid-cols-1">
       <Card className="diablo-surface">
         <CardHeader>
           <CardTitle>How it works</CardTitle>
@@ -341,16 +341,6 @@
               </li>
             {/each}
           </ol>
-        </CardContent>
-      </Card>
-      <Card className="diablo-surface">
-        <CardHeader>
-          <CardTitle>Scheduling model</CardTitle>
-          <CardDescription>Operational model for route planning and availability.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p class="text-white/80">Mon-Sat 8:00 AM - 6:30 PM</p>
-          <p class="mt-2 text-white/80">30 minute route transitions • 60 min lunch break</p>
         </CardContent>
       </Card>
     </section>
@@ -510,7 +500,9 @@
         <div>
           <p class="text-lg font-semibold text-white">Diablo Auto Detailing</p>
           <p class="mt-1 text-white/70">Mobile detailing in Walnut Creek and nearby cities.</p>
-          <p class="mt-4 text-xs text-white/55">© Diablo Auto Detailing • Mon-Sat 8:00 AM - 6:30 PM</p>
+          <p class="mt-4 text-xs text-white/55">
+            Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a> • Mon-Sat 8:00 AM - 6:30 PM
+          </p>
         </div>
         <div>
           <p class="mb-3 text-white/80">Quick Links</p>

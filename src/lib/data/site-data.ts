@@ -77,6 +77,5 @@ export const googleReviews = [
 
 export const footerNotes = [
   'Serving Walnut Creek and nearby cities',
-  'Mon-Sat: 8:00 AM - 6:30 PM',
   'Mobile appointments are convenient and on-location only'
 ];
