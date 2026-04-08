@@ -175,7 +175,7 @@
           style="width: auto; max-width: min(360px, var(--google-photo-width));"
         >
           <img
-            class="h-auto max-h-[18rem] w-auto max-w-full rounded-xl object-contain shadow-lg shadow-black/30"
+            class="h-[18rem] w-auto max-w-full rounded-xl object-contain shadow-lg shadow-black/30"
             src={photo.src}
             alt={photo.alt ?? ''}
             loading="lazy"
