@@ -34,28 +34,28 @@
     :root {
       color-scheme: dark;
 
-      --bg: #060b16;
-      --surface: #0f172a;
-      --surface-soft: #111f36;
-      --surface-accent: #18294a;
+      --bg: #090b10;
+      --surface: #12151c;
+      --surface-soft: #161b22;
+      --surface-accent: #202734;
       --surface-highlight: rgba(245, 158, 11, 0.14);
-      --surface-border: rgba(226, 232, 240, 0.16);
+      --surface-border: rgba(255, 255, 255, 0.2);
 
       --text-primary: #f8fafc;
-      --text-muted: rgba(248, 250, 252, 0.8);
-      --text-subtle: rgba(248, 250, 252, 0.65);
+      --text-muted: rgba(226, 232, 240, 0.82);
+      --text-subtle: rgba(226, 232, 240, 0.65);
 
-      --stroke: rgba(226, 232, 240, 0.16);
+      --stroke: rgba(255, 255, 255, 0.14);
       --focus-ring: rgba(245, 158, 11, 0.6);
 
       --body-bg:
-        radial-gradient(circle at 10% 18%, rgba(56, 189, 248, 0.11), transparent 38%),
-        radial-gradient(circle at 85% 0%, rgba(245, 158, 11, 0.16), transparent 34%),
-        radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.05), transparent 45%),
+        radial-gradient(circle at 10% 18%, rgba(245, 158, 11, 0.16), transparent 38%),
+        radial-gradient(circle at 85% 0%, rgba(120, 113, 108, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 80%, rgba(15, 17, 23, 0.6), transparent 45%),
         var(--bg);
 
       --google-star: #f59e0b;
-      --header-overlay: rgba(6, 11, 22, 0.75);
+      --header-overlay: rgba(9, 11, 16, 0.85);
     }
   }
 

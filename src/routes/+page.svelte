@@ -458,7 +458,7 @@
     </section>
   </main>
 
-  <footer class="mt-12 w-full bg-black">
+  <footer class="w-full bg-black">
     <div class="mx-auto flex w-full max-w-6xl flex-col gap-6 border-t border-white/10 px-4 py-8 text-sm sm:px-6 lg:px-8">
       <div class="grid gap-6 md:grid-cols-3">
         <div>
