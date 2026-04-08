@@ -238,12 +238,8 @@
             <CardContent>
               <dl class="mt-4 space-y-2 text-sm text-white/80">
                 <div class="flex justify-between border-b border-white/10 pb-2">
-                  <dt>Starting at</dt>
+                  <dt>Maximum rate</dt>
                   <dd class="font-semibold">${plan.recommendedPrice}</dd>
-                </div>
-                <div class="flex justify-between border-b border-white/10 pb-2">
-                  <dt>Floor price</dt>
-                  <dd>${plan.floorPrice}</dd>
                 </div>
                 <div class="flex justify-between pb-2">
                   <dt>Visit timing</dt>
