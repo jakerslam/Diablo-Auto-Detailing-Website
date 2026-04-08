@@ -79,10 +79,7 @@
 
 {#if reviewQueue.length > 0}
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4">
-    <div
-      class="reviews-track flex"
-      style={`animation: review-marquee ${animationDuration}s linear infinite;`}
-    >
+    <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s;`}>
       {#each loopReviews as review}
         <article class="reviews-card flex-shrink-0 p-2" style={`width: ${cardWidth}`}>
           <div class="flex aspect-square h-full min-h-0 flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4">
@@ -104,6 +101,7 @@
 <style>
   .reviews-track {
     will-change: transform;
+    animation: review-marquee var(--review-duration, 26s) linear infinite;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
