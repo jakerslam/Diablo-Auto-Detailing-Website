@@ -177,6 +177,12 @@
     });
   }
 
+  function scrollSectionToTop(sectionId: string) {
+    if (typeof window === 'undefined') return;
+    const section = document.getElementById(sectionId);
+    section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   function onSectionNav(event: MouseEvent, sectionId: string, trackingLabel: string, alignToBottom = true) {
     event.preventDefault();
     onQuoteIntent(trackingLabel);
@@ -190,6 +196,11 @@
   function setPlan(plan: PlanType) {
     form.plan = plan;
     onQuoteIntent(`plan_selected_${plan}`);
+  }
+
+  function pickPlan(plan: PlanType) {
+    setPlan(plan);
+    scrollSectionToTop('quote');
   }
 
   const phone = '(510) 631-1230';
@@ -245,7 +256,7 @@
           <h1 class="mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
             Premium detailing for drivers who want a spotless car without leaving their schedule behind
           </h1>
-          <p class="mt-4 max-w-2xl text-white/80">
+          <p class="mt-4 max-w-2xl text-[color:var(--text-primary)]">
             Our complete interior and exterior service runs in a 2-3 hour block and includes carpet shampooing,
             interior detailing, wheel cleaning, and a complimentary ceramic wax finish.
           </p>
@@ -257,8 +268,8 @@
         <div class="grid gap-3">
           {#each serviceProof as item}
             <div class="rounded-2xl border border-white/15 bg-white/5 p-4">
-              <p class="text-xs uppercase tracking-[0.16em] text-white/70">{item.label}</p>
-              <p class="mt-1 text-sm font-medium text-white">{item.value}</p>
+              <p class="text-xs uppercase tracking-[0.16em] text-[color:var(--text-subtle)]">{item.label}</p>
+              <p class="mt-1 text-sm font-medium text-[color:var(--text-primary)]">{item.value}</p>
             </div>
           {/each}
         </div>
@@ -368,8 +379,7 @@
                 className="mt-auto w-full"
                 variant="outline"
                 on:click={() => {
-                  setPlan(plan.id);
-                  scrollSectionToBottom('quote');
+                  pickPlan(plan.id);
                 }}
               >
                 Pick {plan.name}

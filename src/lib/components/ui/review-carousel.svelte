@@ -11,12 +11,15 @@
   export let reviews: Review[] = [];
 
   const MAX_QUEUE_SIZE = 30;
+  const REVIEW_ANIMATION_UNIT = 0.8;
+  const MOBILE_REVIEW_SPEED_MULTIPLIER = 2;
 
   let visibleCount = 1;
   let reviewQueue: Review[] = [];
   let loopReviews: Review[] = [];
   let cardWidth = '100%';
   let animationDuration = 26;
+  let reviewSpeed = 1;
 
   const starRow = (rating: number) => '★'.repeat(Math.max(0, Math.min(5, rating)));
 
@@ -49,14 +52,20 @@
     return 1;
   };
 
+  const getReviewSpeed = () => {
+    if (typeof window === 'undefined') return 1;
+    return window.innerWidth <= 768 ? MOBILE_REVIEW_SPEED_MULTIPLIER : 1;
+  };
+
   const updateCarouselMetrics = () => {
     visibleCount = getVisibleCount();
     cardWidth = `${(100 / Math.max(1, visibleCount)) * 0.7}%`;
+    reviewSpeed = getReviewSpeed();
   };
 
   $: reviewQueue = buildReviewQueue(reviews);
   $: loopReviews = [...reviewQueue, ...reviewQueue];
-  $: animationDuration = Math.max(12, reviewQueue.length * 0.8);
+  $: animationDuration = Math.max(12, (reviewQueue.length * REVIEW_ANIMATION_UNIT) / reviewSpeed);
 
   onMount(() => {
     updateCarouselMetrics();
@@ -70,7 +79,7 @@
 
 {#if reviewQueue.length > 0}
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-4">
-    <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s;`}>
+    <div class="reviews-track flex" style={`--review-duration: ${animationDuration}s; --review-speed: ${reviewSpeed};`}>
       {#each loopReviews as review}
         <article
           class="reviews-card flex-shrink-0 p-2"
@@ -97,7 +106,7 @@
 <style>
   .reviews-track {
     will-change: transform;
-    animation: review-marquee var(--review-duration, 26s) linear infinite;
+    animation: review-marquee calc(var(--review-duration, 26s) / var(--review-speed, 1)) linear infinite;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
