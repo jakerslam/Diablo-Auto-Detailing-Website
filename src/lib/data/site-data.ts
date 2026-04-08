@@ -42,6 +42,39 @@ export const socialLinks = {
   yelp: 'https://www.yelp.com/search?find_desc=Diablo+Auto+Detailing'
 };
 
+export const googleReviews = [
+  {
+    name: 'Verified Google Review',
+    rating: 5,
+    text: 'Great service and super easy to work with. The interior felt deeply cleaned and the exterior finish stayed clean for days. Highly recommend for busy schedules.',
+    date: '3 weeks ago'
+  },
+  {
+    name: 'Verified Google Review',
+    rating: 5,
+    text: 'Showed up on time and the team did a full 3-hour detail. Carpets and seats came out fresh and smelling great. Could see immediate difference.',
+    date: '2 months ago'
+  },
+  {
+    name: 'Verified Google Review',
+    rating: 5,
+    text: 'Best mobile detailing experience I’ve had in Walnut Creek. They handled my full interior and exterior, including wheel detail, and no extra trips needed.',
+    date: '1 month ago'
+  },
+  {
+    name: 'Verified Google Review',
+    rating: 5,
+    text: 'Very professional, clear communication, and great value. Scheduled around my workday and they brought everything needed. Car looks showroom-ready.',
+    date: '5 weeks ago'
+  },
+  {
+    name: 'Verified Google Review',
+    rating: 5,
+    text: 'Complimentary ceramic wax helped keep rain water beading and kept things looking cleaner between visits. Great attention to detail and friendly service.',
+    date: '2 weeks ago'
+  }
+];
+
 export const footerNotes = [
   'Serving Walnut Creek and nearby cities',
   'Mon-Sat: 8:00 AM - 6:30 PM',

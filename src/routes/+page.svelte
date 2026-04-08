@@ -1,6 +1,6 @@
 <script lang="ts">
   import { servicePlans, baseServiceHours, fallbackModelPrice } from '$lib/data/pricing';
-  import { serviceAreas, faqItems, socialLinks, footerNotes } from '$lib/data/site-data';
+  import { serviceAreas, faqItems, socialLinks, footerNotes, googleReviews } from '$lib/data/site-data';
   import type { LeadFormValues, PlanType } from '$lib/types/form';
   import { emptyLeadForm } from '$lib/types/form';
 
@@ -20,6 +20,7 @@
   import Textarea from '$lib/components/ui/textarea.svelte';
   import Select from '$lib/components/ui/select.svelte';
   import AccordionItem from '$lib/components/ui/accordion-item.svelte';
+  import ReviewCarousel from '$lib/components/ui/review-carousel.svelte';
 
   import '../app.css';
 
@@ -120,6 +121,9 @@
         </a>
         <a href="#how" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_how')}>
           Process
+        </a>
+        <a href="#reviews" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_reviews')}>
+          Reviews
         </a>
         <a href="#faq" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_faq')}>
           FAQ
@@ -298,6 +302,25 @@
           <p class="text-white/80">Mon-Sat 8:00 AM - 6:30 PM</p>
           <p class="mt-2 text-white/80">30 minute route transitions • 60 min lunch break</p>
           <p class="mt-3 text-sm text-white/65">If weekend-only booking is requested and Saturdays are full, call us for Sunday options.</p>
+        </CardContent>
+      </Card>
+    </section>
+
+    <section id="reviews">
+      <Card className="diablo-surface">
+        <CardHeader>
+          <div class="flex flex-col gap-1">
+            <CardTitle>Google reviews (5★)</CardTitle>
+            <CardDescription>
+              5-star feedback pulled from Google listing and auto-rotated every few seconds.
+              <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="ml-1 text-glow-300 underline">
+                View live Google profile
+              </a>
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <ReviewCarousel reviews={googleReviews} />
         </CardContent>
       </Card>
     </section>
