@@ -5,7 +5,7 @@ import { PUBLIC_SITE_URL } from '$env/static/public';
 
 export const prerender = true;
 
-const fallbackSiteUrl = 'https://jakerslam.github.io/Diablo-Auto-Detailing-Website';
+const fallbackSiteUrl = 'http://diabloautodetailing.com';
 
 function formatPlanName(planName: string, price: number, discount?: number) {
   if (!discount) {
