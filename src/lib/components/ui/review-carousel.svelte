@@ -123,7 +123,7 @@
   .review-text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 5;
     overflow: hidden;
     text-overflow: ellipsis;
   }
