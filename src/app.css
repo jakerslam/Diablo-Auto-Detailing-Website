@@ -30,19 +30,7 @@
 }
 
 @layer components {
-  .card {
+  .shadcn-glass-card {
     @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm;
-  }
-
-  .btn {
-    @apply inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold transition;
-  }
-
-  .btn-primary {
-    @apply btn bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/30 hover:brightness-110;
-  }
-
-  .btn-secondary {
-    @apply btn border border-white/30 bg-white/10 text-white hover:bg-white/20;
   }
 }

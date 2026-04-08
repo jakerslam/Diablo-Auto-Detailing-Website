@@ -11,6 +11,7 @@ Single page SvelteKit site for Diablo Auto Detailing.
 - SvelteKit
 - TypeScript
 - Tailwind CSS
+- shadcn-style Svelte UI primitives (`src/lib/components/ui/*`)
 
 ## Local development
 
