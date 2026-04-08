@@ -64,6 +64,39 @@
     alt: `Business photo ${index + 1}`
   });
 
+  const sanitizeDirectPhotoItems = (input: unknown) => {
+    if (!Array.isArray(input)) return [];
+
+    const uniquePhotos = new Set<string>();
+
+    return input
+      .map((item, index) => {
+        if (typeof item === 'string') {
+          const src = item.trim();
+          if (!src || uniquePhotos.has(src)) return null;
+          uniquePhotos.add(src);
+          return {
+            src,
+            alt: `Business photo ${index + 1}`
+          };
+        }
+
+        if (!item || typeof item !== 'object') return null;
+
+        const candidate = item as { src?: string; url?: string; alt?: string };
+        const src = String(candidate.src || candidate.url || '').trim();
+        if (!src || uniquePhotos.has(src)) return null;
+        uniquePhotos.add(src);
+
+        return {
+          src,
+          alt: String(candidate.alt || `Business photo ${index + 1}`).trim()
+        };
+      })
+      .filter((photo): photo is { src: string; alt?: string } => Boolean(photo))
+      .slice(0, 20);
+  };
+
   const sanitizePhotoItems = (input: unknown) => {
     if (!Array.isArray(input)) return [];
 
@@ -208,6 +241,17 @@
     const base = import.meta.env.BASE_URL || '/';
     const normalizedBase = base.endsWith('/') ? base : `${base}/`;
 
+    const loadStaticPhotoFeed = async () => {
+      const response = await fetch(`${normalizedBase}photos.json`);
+      if (!response.ok) return;
+
+      const payload = await response.json();
+      const loadedPhotos = sanitizeDirectPhotoItems(payload);
+      if (loadedPhotos.length > 0) {
+        photoItems = loadedPhotos;
+      }
+    };
+
     const loadGooglePhotoFeed = async () => {
       if (!googlePlaceId || !googleMapsApiKey) return;
 
@@ -239,6 +283,10 @@
         if (loadedPhotos.length > 0) {
           photoItems = loadedPhotos;
         }
+      }
+
+      if (photoItems.length === 0) {
+        await loadStaticPhotoFeed();
       }
     } catch {
       reviewItems = googleReviews;
