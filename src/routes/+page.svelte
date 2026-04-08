@@ -227,7 +227,7 @@
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta', false)}>Get My Quote</Button>
-            <Button variant="outline" href="#plans" on:click={(event) => onSectionNav(event, 'plans', 'hero_plans')}>Compare Plans</Button>
+            <Button variant="outline" href="#plans" on:click={(event) => onSectionNav(event, 'plans', 'hero_plans', true)}>Compare Plans</Button>
           </div>
         </div>
         <div class="grid gap-3">
