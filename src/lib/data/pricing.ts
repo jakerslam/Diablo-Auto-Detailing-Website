@@ -14,19 +14,21 @@ export type ServicePlan = {
 
 export const servicePlans: ServicePlan[] = [
   {
-    id: 'one-time',
-    name: 'One-Time',
-    headline: 'One complete interior and exterior detail, no commitment required.',
-    recurringText: 'One-time detail',
-    recommendedPrice: 275,
-    description: 'Great for people who need a deep refresh or are testing service quality first.',
+    id: 'monthly',
+    name: 'Monthly',
+    headline: 'Keep your car at its best with priority scheduling and best value.',
+    recurringText: 'Every month',
+    recommendedPrice: 175,
+    discount: 100,
+    description: 'Best value plan for people who want dependable car care and best monthly savings.',
     includedFeatures: [
       '2-3 hour detail duration',
       'Interior detailing + carpet shampooing',
       'Hand wash and full wheel cleaning',
       'Interior vacuum and glass cleaning',
       'Complimentary ceramic wax'
-    ]
+    ],
+    badge: 'Save $100 every visit'
   },
   {
     id: 'quarterly',
@@ -46,21 +48,19 @@ export const servicePlans: ServicePlan[] = [
     badge: 'Save $50 every visit'
   },
   {
-    id: 'monthly',
-    name: 'Monthly',
-    headline: 'Keep your car at its best with priority scheduling and best value.',
-    recurringText: 'Every month',
-    recommendedPrice: 175,
-    discount: 100,
-    description: 'Best value plan for people who want dependable car care and best monthly savings.',
+    id: 'one-time',
+    name: 'One-Time',
+    headline: 'One complete interior and exterior detail, no commitment required.',
+    recurringText: 'One-time detail',
+    recommendedPrice: 275,
+    description: 'Great for people who need a deep refresh or are testing service quality first.',
     includedFeatures: [
       '2-3 hour detail duration',
       'Interior detailing + carpet shampooing',
       'Hand wash and full wheel cleaning',
       'Interior vacuum and glass cleaning',
       'Complimentary ceramic wax'
-    ],
-    badge: 'Save $100 every visit'
+    ]
   }
 ];
 

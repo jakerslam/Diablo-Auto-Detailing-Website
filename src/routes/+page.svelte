@@ -488,7 +488,7 @@
     </section>
 
     <section id="reviews">
-      <Card className="diablo-surface">
+      <Card className="diablo-surface light-surface-card">
         <CardHeader>
           <div class="flex flex-col items-center gap-1 text-center">
             <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
@@ -511,10 +511,10 @@
 
     <section class="grid gap-4 md:grid-cols-3">
       {#each whyChooseUs as reason}
-        <Card className="diablo-surface">
+        <Card className="diablo-surface light-surface-card">
           <CardHeader>
             <CardTitle>{reason.title}</CardTitle>
-            <CardDescription className="text-white/80">{reason.description}</CardDescription>
+            <CardDescription className="text-[color:var(--text-muted)]">{reason.description}</CardDescription>
           </CardHeader>
         </Card>
       {/each}
@@ -627,7 +627,7 @@
     </section>
 
     <section id="how" class="grid gap-6 md:grid-cols-1">
-      <Card className="diablo-surface">
+      <Card className="diablo-surface light-surface-card">
         <CardHeader className="items-center text-center">
           <CardTitle className="w-full">How it works</CardTitle>
           <CardDescription className="w-full text-[color:var(--text-muted)]">Four step process used by our service team.</CardDescription>
@@ -645,7 +645,7 @@
     </section>
 
     <section id="faq">
-      <Card className="diablo-surface">
+      <Card className="diablo-surface light-surface-card">
         <CardHeader>
           <CardTitle>FAQ</CardTitle>
           <CardDescription className="text-[color:var(--text-muted)]">Common questions before booking.</CardDescription>

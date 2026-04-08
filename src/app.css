@@ -113,6 +113,10 @@
     box-shadow: var(--card-shadow);
   }
 
+  .light-surface-card {
+    color: var(--text-primary);
+  }
+
   .diablo-kicker {
     @apply inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-[0.25em];
     color: var(--text-subtle);
