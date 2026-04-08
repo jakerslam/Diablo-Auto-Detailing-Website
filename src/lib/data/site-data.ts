@@ -38,7 +38,7 @@ export const faqItems = [
 export const socialLinks = {
   instagram: 'https://instagram.com/diabloautodetailing',
   facebook: 'https://facebook.com/diabloautodetailing',
-  google: 'https://maps.google.com/?q=Diablo+Auto+Detailing+Walnut+Creek',
+  google: 'https://share.google/e0LNvlycaeh0Vtb9s',
   yelp: 'https://www.yelp.com/search?find_desc=Diablo+Auto+Detailing'
 };
 
