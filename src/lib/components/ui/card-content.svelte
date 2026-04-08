@@ -4,4 +4,4 @@
   export let className = '';
 </script>
 
-<div class={cn('p-5 pt-0', className)}><slot /></div>
+<div class={cn('px-5 py-4', className)}><slot /></div>

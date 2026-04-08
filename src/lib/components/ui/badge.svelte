@@ -6,7 +6,7 @@
 
 <span
   class={cn(
-    'inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold bg-glow-500 text-slate-900',
+    'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide text-slate-900 bg-glow-400',
     className
   )}
 >

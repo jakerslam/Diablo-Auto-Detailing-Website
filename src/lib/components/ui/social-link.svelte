@@ -8,11 +8,11 @@
   export let target = '_blank';
 </script>
 
-<a
-  {href}
-  {target}
-  {rel}
-  class={cn('underline hover:text-white', className)}
->
+  <a
+    {href}
+    {target}
+    {rel}
+  class={cn('underline decoration-glow-400/70 underline-offset-4 hover:text-glow-400', className)}
+  >
   {label}
 </a>

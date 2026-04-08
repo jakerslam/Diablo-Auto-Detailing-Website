@@ -41,6 +41,37 @@
     `${baseServiceHours} total detail duration`
   ];
 
+  const serviceProof = [
+    { label: 'Service radius', value: 'Serving Walnut Creek + nearby cities' },
+    { label: 'Typical appointment', value: `${baseServiceHours} on-site` },
+    { label: 'How you book', value: 'No showroom visits required' }
+  ];
+
+  const processSteps = [
+    'Tell us your make, model, and timing window.',
+    'We confirm scope and final route pricing before scheduling.',
+    'Technician arrives fully equipped, then full detail starts.',
+    'You get confirmation text and next-route coordination (monthly/quarterly).'
+  ];
+
+  const whyChooseUs = [
+    {
+      title: 'Mobile-first convenience',
+      description:
+        'We travel to your home, office, or parking spot in Walnut Creek and surrounding cities so you do not lose work time.'
+    },
+    {
+      title: 'No hidden detail work',
+      description:
+        'Every plan includes the same complete inside-and-out standard so your quote matches the real service scope.'
+    },
+    {
+      title: 'Built for repeat service',
+      description:
+        'Recurring plans give structured reminders and discounted pricing for better upkeep and fewer surprises.'
+    }
+  ];
+
   function trackEvent(eventName: string, detail: Record<string, string | number | boolean>) {
     if (typeof window === 'undefined') return;
 
@@ -49,7 +80,6 @@
       ...detail
     };
 
-    // External script may expose a custom tracking method; keep this defensive.
     const tracker = (window as Window & { trackEvent?: (name: string, props: Record<string, unknown>) => void }).trackEvent;
     if (typeof tracker === 'function') {
       tracker(eventName, payload);
@@ -70,82 +100,130 @@
   const phone = '(510) 631-1230';
 </script>
 
-<div class="min-h-screen px-4 pb-24 sm:px-6 lg:px-8">
-  <header class="mx-auto flex max-w-6xl items-center justify-between py-4">
-    <a href="#top" class="group inline-flex items-center gap-3">
-      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/25">DX</span>
-      <div>
-        <p class="text-lg font-semibold">Diablo Auto Detailing</p>
-        <p class="text-xs text-white/65">Mobile Car Detailing | Walnut Creek</p>
-      </div>
-    </a>
-    <Button variant="secondary" href="#quote" on:click={() => onQuoteIntent('header_cta')}>Request a Quote</Button>
+<div class="diablo-page px-4 pb-24 sm:px-6 lg:px-8">
+  <header class="sticky top-0 z-20 bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 py-4 md:flex-nowrap">
+      <a href="#top" class="group inline-flex items-center gap-3">
+        <span
+          class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/25"
+        >
+          DX
+        </span>
+        <div>
+          <p class="text-lg font-semibold tracking-wide">Diablo Auto Detailing</p>
+          <p class="text-xs text-white/65">Mobile Car Detailing in Walnut Creek</p>
+        </div>
+      </a>
+      <nav class="flex items-center gap-2 text-sm text-white/85">
+        <a href="#plans" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_plans')}>
+          Plans
+        </a>
+        <a href="#how" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_how')}>
+          Process
+        </a>
+        <a href="#faq" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={() => onQuoteIntent('nav_faq')}>
+          FAQ
+        </a>
+      </nav>
+      <Button variant="outline" href="#quote" on:click={() => onQuoteIntent('header_cta')}>Request Quote</Button>
+    </div>
+    <p class="mx-auto max-w-6xl pb-2 text-center text-sm text-white/65">
+      Need same-day help? Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
+    </p>
   </header>
 
-  <main id="top" class="mx-auto max-w-6xl space-y-14">
-    <section class="rounded-[2rem] border border-white/10 bg-white/10 p-6 md:p-10" id="hero">
-      <p class="mb-2 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-3 py-1 text-xs tracking-wider">
-        MOBILE DETAILING IN WALNUT CREEK
-      </p>
-      <h1 class="mt-3 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
-        Premium mobile detailing for people who want a clean car without stopping their day
-      </h1>
-      <p class="mt-4 max-w-2xl text-white/85">
-        2-3 hour full detail, inside and out, with carpet shampooing, interior detailing, wheel care, and a complimentary
-        ceramic wax finish.
-      </p>
-      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-        <Button href="#quote" on:click={() => onQuoteIntent('hero_cta')}>Request a Quote</Button>
-        <Button variant="secondary" href="#plans" on:click={() => onQuoteIntent('hero_compare')}>
-          Compare One-Time vs Monthly
-        </Button>
-      </div>
-      <p class="mt-3 text-sm text-white/65">Call to confirm availability: <a class="underline" href={`tel:${phone}`}>{phone}</a></p>
-    </section>
-
-    <section class="grid gap-6 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>What’s included</CardTitle>
-          <CardDescription>Standard service scope for all requested plans.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul class="mt-1 space-y-3 text-white/90">
-            {#each baseInclusions as item}
-              <li class="flex items-start gap-2">
-                <span class="mt-1 h-2 w-2 rounded-full bg-glow-400"></span>
-                <span>{item}</span>
-              </li>
-            {/each}
-          </ul>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Service areas</CardTitle>
-          <CardDescription>Serving Walnut Creek and nearby cities. We come to you.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div class="mt-2 flex flex-wrap gap-2">
-            {#each serviceAreas as city}
-              <span class="rounded-full border border-white/20 px-3 py-1 text-sm text-white/90">{city}</span>
-            {/each}
+  <main id="top" class="mx-auto mt-8 max-w-6xl space-y-10">
+    <section class="diablo-surface" id="hero">
+      <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] lg:items-start">
+        <div>
+          <p class="diablo-kicker">MOBILE DETAILING IN WALNUT CREEK</p>
+          <h1 class="mt-4 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
+            Premium detailing for drivers who want a spotless car without leaving their schedule behind
+          </h1>
+          <p class="mt-4 max-w-2xl text-white/80">
+            Our complete interior and exterior service runs in a 2-3 hour block and includes carpet shampooing,
+            interior detailing, wheel cleaning, and a complimentary ceramic wax finish.
+          </p>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button href="#quote" on:click={() => onQuoteIntent('hero_cta')}>Get My Quote</Button>
+            <Button variant="outline" href="#plans" on:click={() => onQuoteIntent('hero_plans')}>Compare Plans</Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div class="grid gap-3">
+          {#each serviceProof as item}
+            <div class="rounded-2xl border border-white/15 bg-white/5 p-4">
+              <p class="text-xs uppercase tracking-[0.16em] text-white/70">{item.label}</p>
+              <p class="mt-1 text-sm font-medium text-white">{item.value}</p>
+            </div>
+          {/each}
+        </div>
+      </div>
     </section>
 
-    <section id="plans">
-      <div class="mb-4 flex items-end justify-between gap-3">
-        <h2 class="text-2xl font-semibold">Plans & pricing</h2>
-        <p class="text-sm text-white/65">*Prices are starting points and subject to vehicle condition / model confirmation.</p>
+    <section class="grid gap-4 md:grid-cols-3">
+      {#each whyChooseUs as reason}
+        <Card className="diablo-surface">
+          <CardHeader>
+            <CardTitle>{reason.title}</CardTitle>
+            <CardDescription>{reason.description}</CardDescription>
+          </CardHeader>
+        </Card>
+      {/each}
+    </section>
+
+    <section class="diablo-surface">
+      <div class="mb-5">
+        <p class="diablo-kicker">SERVICE SCOPE</p>
+        <h2 class="diablo-section-title mt-2">What every detail includes</h2>
+        <p class="diablo-subtitle mt-2">Transparent scope, no extra upsells during the visit.</p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Included in all plans</CardTitle>
+            <CardDescription>Full detail baseline for one-time, monthly, and quarterly customers.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul class="mt-1 space-y-3 text-white/90">
+              {#each baseInclusions as item}
+                <li class="flex items-start gap-2">
+                  <span class="mt-1.5 h-2 w-2 rounded-full bg-wash-400"></span>
+                  <span>{item}</span>
+                </li>
+              {/each}
+            </ul>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Service area coverage</CardTitle>
+            <CardDescription>We come to Walnut Creek and nearby communities.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="mt-2 flex flex-wrap gap-2">
+              {#each serviceAreas as city}
+                <span class="rounded-full border border-white/20 px-3 py-1 text-xs text-white/90">{city}</span>
+              {/each}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+
+    <section id="plans" class="space-y-4">
+      <div class="diablo-section-head">
+        <p class="diablo-kicker">PLANS & PRICING</p>
+        <div class="flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
+          <h2 class="diablo-section-title">Pick a plan that fits your schedule</h2>
+          <p class="diablo-subtitle">Prices are starting points. Final price is confirmed by vehicle condition and model.</p>
+        </div>
       </div>
 
       <div class="grid gap-5 md:grid-cols-3">
-        {#each servicePlans as plan}
-          <Card>
+        {#each servicePlans as plan, index}
+          <Card className={index === servicePlans.length - 1 ? 'border-glow-400/50' : ''}>
             <CardHeader>
-              <div class="mb-2 inline-flex items-center gap-2">
+              <div class="mb-2 flex items-center justify-between gap-2">
                 <CardTitle>{plan.name}</CardTitle>
                 {#if plan.badge}
                   <Badge>{plan.badge}</Badge>
@@ -165,13 +243,13 @@
                 </div>
                 <div class="flex justify-between pb-2">
                   <dt>Visit timing</dt>
-                  <dd>{baseServiceHours} / {plan.recurringText}</dd>
+                  <dd>{plan.recurringText}</dd>
                 </div>
               </dl>
               <ul class="mt-3 space-y-2 text-sm">
                 {#each plan.includedFeatures as feature}
                   <li class="flex items-start gap-2">
-                    <span class="mt-1 h-2 w-2 rounded-full bg-wash-400"></span>
+                    <span class="mt-1 h-2 w-2 rounded-full bg-glow-400"></span>
                     <span>{feature}</span>
                   </li>
                 {/each}
@@ -184,47 +262,51 @@
                   document.getElementById('quote')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
               >
-                Get this quote
+                Pick {plan.name}
               </Button>
             </CardContent>
           </Card>
         {/each}
       </div>
-      <p class="mt-3 text-sm text-white/65">
-        Default baseline reference price: ${fallbackModelPrice} for typical detail vehicles.
+      <p class="diablo-subtitle">
+        Baseline reference price: ${fallbackModelPrice} for typical vehicles.
       </p>
     </section>
 
-    <section class="grid gap-6 md:grid-cols-2" id="how">
-      <Card>
+    <section id="how" class="grid gap-6 md:grid-cols-2">
+      <Card className="diablo-surface">
         <CardHeader>
           <CardTitle>How it works</CardTitle>
+          <CardDescription>Four step process used by our service team.</CardDescription>
         </CardHeader>
         <CardContent>
           <ol class="mt-2 space-y-4 text-white/80">
-            <li>1) Tell us your car make/model and preferred dates.</li>
-            <li>2) We confirm scope, final price, and route timing (2-3 hour block).</li>
-            <li>3) We arrive fully equipped and complete inside + outside detailing.</li>
-            <li>4) You confirm, then we schedule your next route for recurring plans.</li>
+            {#each processSteps as step, index}
+              <li>
+                <p class="text-sm font-semibold text-white/95">{index + 1}. {step}</p>
+              </li>
+            {/each}
           </ol>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="diablo-surface">
         <CardHeader>
           <CardTitle>Scheduling model</CardTitle>
-          <CardDescription>Operational constraints we follow consistently.</CardDescription>
+          <CardDescription>Operational model for route planning and availability.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p class="text-white/80">Mon-Sat 8:00 AM - 6:30 PM • 30 min route transitions • 60 min midday reset.</p>
-          <p class="mt-3 text-sm text-white/65">If weekend-only and weekend slots are not available, please call for possible Sunday handling.</p>
+          <p class="text-white/80">Mon-Sat 8:00 AM - 6:30 PM</p>
+          <p class="mt-2 text-white/80">30 minute route transitions • 60 min lunch break</p>
+          <p class="mt-3 text-sm text-white/65">If weekend-only booking is requested and Saturdays are full, call us for Sunday options.</p>
         </CardContent>
       </Card>
     </section>
 
     <section id="faq">
-      <Card>
+      <Card className="diablo-surface">
         <CardHeader>
           <CardTitle>FAQ</CardTitle>
+          <CardDescription>Common questions before booking.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3">
           {#each faqItems as item}
@@ -236,135 +318,136 @@
       </Card>
     </section>
 
-    <section id="quote">
-      <Card>
-        <CardHeader>
-          <CardTitle>Request a quote</CardTitle>
-          <CardDescription>All pricing requests route to quote form review before any booking confirmation.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form
-            class="mt-6 grid gap-4 md:grid-cols-2"
-            action={ghlFormConfigured ? ghlFormEndpoint : undefined}
-            method={ghlFormConfigured ? 'POST' : undefined}
-          >
-            {#if !ghlFormConfigured}
-              <p class="md:col-span-2 text-sm text-amber-200">
-                Form endpoint is not configured yet. Set PUBLIC_GHL_FORM_ENDPOINT in repository secret/env to capture this
-                submission.
-              </p>
-            {/if}
+    <section id="quote" class="diablo-surface">
+      <CardHeader>
+        <CardTitle>Request a quote</CardTitle>
+        <CardDescription>Pricing is confirmed after your vehicle details and booking window are reviewed.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form
+          class="mt-6 grid gap-4 md:grid-cols-2"
+          action={ghlFormConfigured ? ghlFormEndpoint : undefined}
+          method={ghlFormConfigured ? 'POST' : undefined}
+        >
+          {#if !ghlFormConfigured}
+            <p class="md:col-span-2 text-sm text-amber-200">
+              Form endpoint is not configured yet. Set PUBLIC_GHL_FORM_ENDPOINT in repository secret/env to capture this
+              submission.
+            </p>
+          {/if}
 
-            <HiddenInput name="source" value="Diablo Auto Detailing Website" />
-            <HiddenInput name="selected_plan" value={form.plan} />
+          <HiddenInput name="source" value="Diablo Auto Detailing Website" />
+          <HiddenInput name="selected_plan" value={form.plan} />
 
-            <FormField id="first_name" label="First name" required>
-              <Input id="first_name" name="first_name" bind:value={form.firstName} required />
-            </FormField>
-            <FormField id="last_name" label="Last name" required>
-              <Input id="last_name" name="last_name" bind:value={form.lastName} required />
-            </FormField>
-            <FormField id="phone" label="Phone" required>
-              <Input id="phone" name="phone" type="tel" bind:value={form.phone} required />
-            </FormField>
-            <FormField id="email" label="Email" required>
-              <Input id="email" name="email" type="email" bind:value={form.email} required />
-            </FormField>
-            <FormField id="city_or_zip" label="City or ZIP" required>
-              <Input id="city_or_zip" name="city_or_zip" bind:value={form.city} required />
-            </FormField>
-            <FormField id="zip" label="ZIP" required>
-              <Input id="zip" name="zip" bind:value={form.zip} required />
-            </FormField>
-            <FormField id="vehicle_year" label="Vehicle year" required>
-              <Input id="vehicle_year" name="vehicle_year" bind:value={form.vehicleYear} required />
-            </FormField>
-            <FormField id="vehicle_make" label="Vehicle make" required>
-              <Input id="vehicle_make" name="vehicle_make" bind:value={form.vehicleMake} required />
-            </FormField>
-            <FormField id="vehicle_model" label="Vehicle model" required>
-              <Input id="vehicle_model" name="vehicle_model" bind:value={form.vehicleModel} required />
-            </FormField>
-            <FormField id="preferred_window" label="Preferred date window" required>
-              <Input id="preferred_window" name="preferred_window" bind:value={form.preferredWindow} required />
-            </FormField>
+          <FormField id="first_name" label="First name" required>
+            <Input id="first_name" name="first_name" bind:value={form.firstName} required />
+          </FormField>
+          <FormField id="last_name" label="Last name" required>
+            <Input id="last_name" name="last_name" bind:value={form.lastName} required />
+          </FormField>
+          <FormField id="phone" label="Phone" required>
+            <Input id="phone" name="phone" type="tel" bind:value={form.phone} required />
+          </FormField>
+          <FormField id="email" label="Email" required>
+            <Input id="email" name="email" type="email" bind:value={form.email} required />
+          </FormField>
+          <FormField id="city_or_zip" label="City or ZIP" required>
+            <Input id="city_or_zip" name="city_or_zip" bind:value={form.city} required />
+          </FormField>
+          <FormField id="zip" label="ZIP" required>
+            <Input id="zip" name="zip" bind:value={form.zip} required />
+          </FormField>
+          <FormField id="vehicle_year" label="Vehicle year" required>
+            <Input id="vehicle_year" name="vehicle_year" bind:value={form.vehicleYear} required />
+          </FormField>
+          <FormField id="vehicle_make" label="Vehicle make" required>
+            <Input id="vehicle_make" name="vehicle_make" bind:value={form.vehicleMake} required />
+          </FormField>
+          <FormField id="vehicle_model" label="Vehicle model" required>
+            <Input id="vehicle_model" name="vehicle_model" bind:value={form.vehicleModel} required />
+          </FormField>
+          <FormField id="preferred_window" label="Preferred date window" required>
+            <Input id="preferred_window" name="preferred_window" bind:value={form.preferredWindow} required />
+          </FormField>
 
-            <FormField id="plan" label="Plan" required className="md:col-span-2">
-              <Select id="plan" name="plan" bind:value={form.plan}>
-                {#each planIds as planId}
-                  <option value={planId}>{planId}</option>
-                {/each}
-              </Select>
-            </FormField>
+          <FormField id="plan" label="Plan" required className="md:col-span-2">
+            <Select id="plan" name="plan" bind:value={form.plan}>
+              {#each planIds as planId}
+                <option value={planId}>{planId}</option>
+              {/each}
+            </Select>
+          </FormField>
 
-            <FormField id="message" label="Message" className="md:col-span-2">
-              <Textarea
-                rows={3}
-                id="message"
-                name="message"
-                bind:value={form.message}
-                placeholder="Anything specific we should know?"
+          <FormField id="message" label="Message" className="md:col-span-2">
+            <Textarea
+              rows={3}
+              id="message"
+              name="message"
+              bind:value={form.message}
+              placeholder="Anything specific we should know?"
+            />
+          </FormField>
+
+          <FormField id="best_contact_time" label="Best time to contact" className="md:col-span-2">
+            <Input
+              id="best_contact_time"
+              name="best_contact_time"
+              bind:value={form.bestContactTime}
+              placeholder="Any preferences"
+            />
+          </FormField>
+
+          <fieldset class="md:col-span-2">
+            <legend class="mb-2 text-sm">What's included in your quote *</legend>
+            <div class="grid gap-2 text-sm sm:grid-cols-2">
+              <CheckboxField
+                id="include_interior_detailing"
+                name="include_interior_detailing"
+                bind:checked={form.includeInteriorDetailing}
+                label="Interior detailing + carpet shampooing"
               />
-            </FormField>
-
-            <FormField id="best_contact_time" label="Best time to contact" className="md:col-span-2">
-              <Input
-                id="best_contact_time"
-                name="best_contact_time"
-                bind:value={form.bestContactTime}
-                placeholder="Any preferences"
+              <CheckboxField
+                id="include_wheel_cleaning"
+                name="include_wheel_cleaning"
+                bind:checked={form.includeWheelCleaning}
+                label="Full wheel cleaning"
               />
-            </FormField>
+              <CheckboxField
+                id="include_interior_vacuum"
+                name="include_interior_vacuum"
+                bind:checked={form.includeInteriorVacuum}
+                label="Full interior vacuum + glass clean"
+              />
+              <CheckboxField
+                id="include_ceramic_wax"
+                name="include_ceramic_wax"
+                bind:checked={form.includeCeramicWax}
+                label="Complimentary ceramic wax"
+              />
+            </div>
+          </fieldset>
 
-            <fieldset class="md:col-span-2">
-              <legend class="mb-2 text-sm">What's included in your quote *</legend>
-              <div class="grid gap-2 text-sm sm:grid-cols-2">
-                <CheckboxField
-                  id="include_interior_detailing"
-                  name="include_interior_detailing"
-                  bind:checked={form.includeInteriorDetailing}
-                  label="Interior detailing + carpet shampooing"
-                />
-                <CheckboxField
-                  id="include_wheel_cleaning"
-                  name="include_wheel_cleaning"
-                  bind:checked={form.includeWheelCleaning}
-                  label="Full wheel cleaning"
-                />
-                <CheckboxField
-                  id="include_interior_vacuum"
-                  name="include_interior_vacuum"
-                  bind:checked={form.includeInteriorVacuum}
-                  label="Full interior vacuum + glass clean"
-                />
-                <CheckboxField
-                  id="include_ceramic_wax"
-                  name="include_ceramic_wax"
-                  bind:checked={form.includeCeramicWax}
-                  label="Complimentary ceramic wax"
-                />
-              </div>
-            </fieldset>
-
-            <FormSubmit value="Request Quote" disabled={!ghlFormConfigured} />
-          </form>
-        </CardContent>
-      </Card>
+          <FormSubmit value="Request Quote" disabled={!ghlFormConfigured} />
+        </form>
+      </CardContent>
     </section>
+  </main>
 
-    <footer class="rounded-[1.8rem] border border-white/10 bg-black/30 p-6">
+  <footer class="mx-auto mt-12 max-w-6xl rounded-[1.8rem] border border-white/10 bg-black/30 p-6">
+    <div class="diablo-surface">
       <div class="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-        <p>
+        <p class="text-white/75">
           Follow:
           <SocialLink href={socialLinks.instagram} label="Instagram" /> ·
           <SocialLink href={socialLinks.facebook} label="Facebook" /> ·
-          <SocialLink href={socialLinks.google} label="Google" />
+          <SocialLink href={socialLinks.google} label="Google" /> ·
+          <SocialLink href={socialLinks.yelp} label="Yelp" />
         </p>
-        <p>Copyright © Diablo Auto Detailing</p>
+        <p class="text-white/80">© Diablo Auto Detailing</p>
       </div>
       <p class="mt-3 text-xs text-white/65">{footerNotes.join(' • ')}</p>
-    </footer>
-  </main>
+    </div>
+  </footer>
 
   <a
     href="#quote"

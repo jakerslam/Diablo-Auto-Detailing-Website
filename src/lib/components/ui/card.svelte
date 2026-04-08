@@ -4,4 +4,4 @@
   export let className = '';
 </script>
 
-<div class={cn('rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm', className)}><slot /></div>
+<div class={cn('rounded-2xl border border-white/15 bg-[rgba(15,26,48,0.8)] backdrop-blur-sm', className)}><slot /></div>

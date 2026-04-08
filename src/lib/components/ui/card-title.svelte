@@ -4,4 +4,4 @@
   export let className = '';
 </script>
 
-<h3 class={cn('text-lg leading-none font-semibold tracking-tight', className)}><slot /></h3>
+<h3 class={cn('text-lg leading-tight font-semibold tracking-tight md:text-xl', className)}><slot /></h3>

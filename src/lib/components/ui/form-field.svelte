@@ -12,7 +12,7 @@
   <Label forInput={id}>
     {label}
     {#if required}
-      <span class="text-rose-300">*</span>
+      <span class="text-glow-400">*</span>
     {/if}
   </Label>
   <slot />
