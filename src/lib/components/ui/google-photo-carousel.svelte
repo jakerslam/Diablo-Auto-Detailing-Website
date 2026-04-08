@@ -7,6 +7,7 @@
   };
 
   export let photos: Photo[] = [];
+  export let reverseDirection = false;
 
   const MAX_PHOTOS = 20;
 
@@ -63,7 +64,10 @@
 
 {#if photoQueue.length > 0}
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-3">
-    <div class="google-photo-track flex" style={`--google-photo-duration: ${animationDuration}s; --google-photo-width: ${cardWidth};`}>
+    <div
+      class={`google-photo-track flex ${reverseDirection ? 'reverse-direction' : ''}`}
+      style={`--google-photo-duration: ${animationDuration}s; --google-photo-width: ${cardWidth};`}
+    >
       {#each loopPhotos as photo}
         <figure
           class="google-photo-card flex-shrink-0 p-2"
@@ -87,6 +91,11 @@
     animation: google-photo-marquee calc(var(--google-photo-duration, 24s) * 0.8) linear infinite;
     animation-timing-function: linear;
     animation-direction: normal;
+    --google-photo-distance: -50%;
+  }
+
+  .google-photo-track.reverse-direction {
+    --google-photo-distance: 50%;
   }
 
   .google-photo-card {
@@ -98,7 +107,7 @@
       transform: translateX(0);
     }
     to {
-      transform: translateX(-50%);
+      transform: translateX(var(--google-photo-distance));
     }
   }
 

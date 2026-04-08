@@ -380,29 +380,22 @@
       </div>
     </section>
 
-    <section class="space-y-4">
-      <Card className="diablo-surface">
-        <CardHeader className="items-center text-center">
-          <CardTitle>Recent Google photos</CardTitle>
-          <CardDescription className="text-[color:var(--text-muted)]">
-            Up to 20 images from the listing photo feed.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <GooglePhotoCarousel photos={photoItems} />
-        </CardContent>
-      </Card>
-    </section>
-
     <section id="reviews">
       <Card className="diablo-surface">
         <CardHeader>
-            <div class="flex flex-col items-center gap-1 text-center">
-              <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
+          <div class="flex flex-col items-center gap-1 text-center">
+            <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
+            <CardDescription className="text-[color:var(--text-muted)]">
+              Up to 20 from recent 5-star feedback.
+            </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
           <ReviewCarousel reviews={reviewItems} />
+          <div class="mt-5">
+            <div class="mb-2 text-sm font-semibold text-[color:var(--text-primary)]">Recent Google photos</div>
+            <GooglePhotoCarousel photos={photoItems} reverseDirection={true} />
+          </div>
         </CardContent>
       </Card>
     </section>
