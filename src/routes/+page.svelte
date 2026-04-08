@@ -101,9 +101,9 @@
   const phone = '(510) 631-1230';
 </script>
 
-<div class="diablo-page px-4 pb-24 sm:px-6 lg:px-8">
-  <header class="sticky top-0 z-20 bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 py-4 md:flex-nowrap">
+<div class="diablo-page pb-24">
+  <header class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
       <a href="#top" class="group inline-flex items-center gap-3">
         <span
           class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-glow-500 text-slate-950 shadow-lg shadow-glow-500/25"
@@ -131,12 +131,12 @@
       </nav>
       <Button variant="outline" href="#quote" on:click={() => onQuoteIntent('header_cta')}>Request Quote</Button>
     </div>
-    <p class="mx-auto max-w-6xl pb-2 text-center text-sm text-white/65">
+    <p class="mx-auto max-w-6xl pb-2 px-4 text-center text-sm text-white/65 sm:px-6 lg:px-8">
       Need same-day help? Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
     </p>
   </header>
 
-  <main id="top" class="mx-auto mt-8 max-w-6xl space-y-10">
+  <main id="top" class="mx-auto mt-8 max-w-6xl space-y-10 px-4 sm:px-6 lg:px-8">
     <section class="diablo-surface" id="hero">
       <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] lg:items-start">
         <div>
@@ -452,19 +452,29 @@
     </section>
   </main>
 
-  <footer class="mx-auto mt-12 max-w-6xl rounded-[1.8rem] border border-white/10 bg-black/30 p-6">
-    <div class="diablo-surface">
-      <div class="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-white/75">
+  <footer class="mt-12 w-full bg-black">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 border-t border-white/10 px-4 py-8 text-sm sm:px-6 lg:px-8">
+      <div class="grid gap-4 text-white md:grid-cols-3 md:items-center">
+        <div>
+          <p class="text-lg font-semibold">Diablo Auto Detailing</p>
+          <p class="mt-1 text-white/70">Mobile detailing in Walnut Creek and nearby areas</p>
+        </div>
+        <nav class="flex flex-wrap gap-4 text-white/80">
+          <a href="#plans" class="hover:text-glow-300">Plans</a>
+          <a href="#how" class="hover:text-glow-300">Process</a>
+          <a href="#reviews" class="hover:text-glow-300">Reviews</a>
+          <a href="#faq" class="hover:text-glow-300">FAQ</a>
+          <a href="#quote" class="hover:text-glow-300">Request Quote</a>
+        </nav>
+        <p class="text-white/80">
           Follow:
-          <SocialLink href={socialLinks.instagram} label="Instagram" /> ·
-          <SocialLink href={socialLinks.facebook} label="Facebook" /> ·
-          <SocialLink href={socialLinks.google} label="Google" /> ·
-          <SocialLink href={socialLinks.yelp} label="Yelp" />
+          <SocialLink href={socialLinks.instagram} label="Instagram" className="text-white/80" /> ·
+          <SocialLink href={socialLinks.facebook} className="text-white/80" label="Facebook" /> ·
+          <SocialLink href={socialLinks.google} className="text-white/80" label="Google" /> ·
+          <SocialLink href={socialLinks.yelp} className="text-white/80" label="Yelp" />
         </p>
-        <p class="text-white/80">© Diablo Auto Detailing</p>
       </div>
-      <p class="mt-3 text-xs text-white/65">{footerNotes.join(' • ')}</p>
+      <p class="text-xs text-white/55">© Diablo Auto Detailing • {footerNotes.join(' • ')}</p>
     </div>
   </footer>
 
