@@ -10,12 +10,15 @@
   export let reverseDirection = false;
 
   const MAX_PHOTOS = 20;
+  const PHOTO_ANIMATION_UNIT = 0.8;
+  const MOBILE_PHOTO_SPEED_MULTIPLIER = 2;
 
   let visibleCount = 1;
   let photoQueue: Photo[] = [];
   let loopPhotos: Photo[] = [];
   let cardWidth = '100%';
   let animationDuration = 24;
+  let photoSpeed = 1;
 
   const normalizePhotos = (input: Photo[]) => {
     if (!Array.isArray(input)) return [];
@@ -44,14 +47,20 @@
     return `${(100 / Math.max(1, visibleCount)) * 0.82}%`;
   };
 
+  const getPhotoSpeed = () => {
+    if (typeof window === 'undefined') return 1;
+    return window.innerWidth <= 768 ? MOBILE_PHOTO_SPEED_MULTIPLIER : 1;
+  };
+
   const updateCarouselMetrics = () => {
     visibleCount = getVisibleCount();
     cardWidth = getCardWidth();
+    photoSpeed = getPhotoSpeed();
   };
 
   $: photoQueue = normalizePhotos(photos);
   $: loopPhotos = [...photoQueue, ...photoQueue];
-  $: animationDuration = Math.max(12, photoQueue.length * 0.9 + 10);
+  $: animationDuration = Math.max(12, (photoQueue.length * PHOTO_ANIMATION_UNIT) / photoSpeed);
 
   onMount(() => {
     updateCarouselMetrics();
@@ -66,7 +75,7 @@
   <div class="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-3">
     <div
       class={`google-photo-track flex ${reverseDirection ? 'reverse-direction' : ''}`}
-      style={`--google-photo-duration: ${animationDuration}s; --google-photo-width: ${cardWidth};`}
+      style={`--google-photo-duration: ${animationDuration}s; --google-photo-speed: ${photoSpeed}; --google-photo-width: ${cardWidth};`}
     >
       {#each loopPhotos as photo}
         <figure
@@ -88,7 +97,7 @@
 <style>
   .google-photo-track {
     will-change: transform;
-    animation: google-photo-marquee calc(var(--google-photo-duration, 24s) * 0.8) linear infinite;
+    animation: google-photo-marquee calc(var(--google-photo-duration, 24s) / var(--google-photo-speed, 1)) linear infinite;
     animation-timing-function: linear;
     animation-direction: normal;
     --google-photo-distance: -50%;

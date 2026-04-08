@@ -7,7 +7,6 @@
     socialLinks,
     footerNotes,
     googleReviews,
-    googlePhotos,
     businessProfile
   } from '$lib/data/site-data';
   import type { LeadFormValues, PlanType } from '$lib/types/form';
@@ -39,7 +38,10 @@
     text: string;
     date: string;
     photo?: string;
+    photoUrl?: string;
     photoAlt?: string;
+    image?: string;
+    imageUrl?: string;
   };
 
   let form: LeadFormValues = {
@@ -47,17 +49,10 @@
   };
 
   let reviewItems: ReviewData[] = googleReviews;
-  let photoItems: { src: string; alt?: string }[] = googlePhotos
-    .slice(0, 20)
-    .map((photo) => ({ src: photo.url, alt: photo.alt }));
+  let photoItems: { src: string; alt?: string }[] = [];
   let showFloatingQuote = true;
   const googlePlaceId = import.meta.env.PUBLIC_GOOGLE_PLACE_ID || '';
   const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || '';
-
-  const fallbackPhotoItems = () =>
-    googlePhotos
-      .slice(0, 20)
-      .map((photo) => ({ src: photo.url, alt: photo.alt }));
 
   const mapPhotoReference = (photoRef: string, index: number) => ({
     src: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=${encodeURIComponent(photoRef)}&key=${googleMapsApiKey}`,
@@ -98,6 +93,30 @@
     showFloatingQuote = !(quoteInView || topbarInView);
   }
 
+  const buildReviewPhotoItems = (reviews: ReviewData[]) => {
+    const uniquePhotos = new Set<string>();
+
+    return reviews
+      .map((review) => {
+        const src =
+          review.photo?.trim() ||
+          review.photoUrl?.trim() ||
+          review.image?.trim() ||
+          review.imageUrl?.trim() ||
+          '';
+
+        if (!src || uniquePhotos.has(src)) return null;
+        uniquePhotos.add(src);
+
+        return {
+          src,
+          alt: review.photoAlt || `${review.name} review photo`
+        };
+      })
+      .filter((photo): photo is { src: string; alt?: string } => Boolean(photo))
+      .slice(0, 20);
+  };
+
   const sanitizeReviews = (input: unknown): ReviewData[] => {
     if (!Array.isArray(input)) return [];
 
@@ -110,7 +129,10 @@
           text: String(candidate?.text || '').trim(),
           date: String(candidate?.date || '').trim(),
           photo: String(candidate?.photo || '').trim(),
-          photoAlt: String(candidate?.photoAlt || '').trim()
+          photoUrl: String(candidate?.photoUrl || '').trim(),
+          photoAlt: String(candidate?.photoAlt || '').trim(),
+          image: String(candidate?.image || '').trim(),
+          imageUrl: String(candidate?.imageUrl || '').trim()
         };
       })
       .filter((review) => review.name && review.text && review.rating > 0);
@@ -167,20 +189,15 @@
       const loadedReviews = sanitizeReviews(payload);
       if (loadedReviews.length > 0) {
         reviewItems = loadedReviews;
-        const loadedPhotos = loadedReviews
-          .filter((review) => review.photo)
-          .map((review) => ({
-            src: review.photo as string,
-            alt: review.photoAlt || `${review.name} review photo`
-          }));
+        const loadedPhotos = buildReviewPhotoItems(loadedReviews);
 
-        if (photoItems.length === 20 && loadedPhotos.length > 0) {
-          photoItems = loadedPhotos.slice(0, 20);
+        if (loadedPhotos.length > 0) {
+          photoItems = loadedPhotos;
         }
       }
     } catch {
       reviewItems = googleReviews;
-      photoItems = fallbackPhotoItems();
+      photoItems = buildReviewPhotoItems(googleReviews);
     }
 
     updateFloatingQuoteVisibility();
@@ -385,17 +402,15 @@
         <CardHeader>
           <div class="flex flex-col items-center gap-1 text-center">
             <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
-            <CardDescription className="text-[color:var(--text-muted)]">
-              Up to 20 from recent 5-star feedback.
-            </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
           <ReviewCarousel reviews={reviewItems} />
-          <div class="mt-5">
-            <div class="mb-2 text-sm font-semibold text-[color:var(--text-primary)]">Recent Google photos</div>
+          {#if photoItems.length > 0}
+            <div class="mt-5">
             <GooglePhotoCarousel photos={photoItems} reverseDirection={true} />
-          </div>
+            </div>
+          {/if}
         </CardContent>
       </Card>
     </section>
