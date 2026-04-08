@@ -95,6 +95,7 @@
 
   .diablo-surface {
     background: linear-gradient(155deg, var(--surface-soft), var(--surface));
+    color: var(--text-primary);
     @apply rounded-3xl border border-[var(--surface-border)] px-5 py-6 shadow-[0_24px_70px_-40px_rgba(14,23,42,0.22)] md:px-8;
   }
 

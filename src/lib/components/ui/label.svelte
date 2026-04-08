@@ -5,4 +5,4 @@
   export let forInput = '';
 </script>
 
-<label for={forInput} class={cn('text-sm font-medium text-white/90', className)}><slot /></label>
+<label for={forInput} class={cn('text-sm font-medium text-[color:var(--text-primary)]', className)}><slot /></label>

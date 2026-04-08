@@ -88,10 +88,10 @@
           <div
             class="mx-auto flex aspect-square h-full min-h-0 w-full max-w-[360px] flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-4"
           >
-            <p class="review-text text-sm leading-relaxed text-white/90">“{review.text}”</p>
+            <p class="review-text text-sm leading-relaxed text-[color:var(--text-muted)]">“{review.text}”</p>
             <div>
-              <p class="text-sm font-semibold text-white/95">{formatReviewerName(review.name)}</p>
-              <p class="mt-1 text-xs font-semibold text-white/80">
+              <p class="text-sm font-semibold text-[color:var(--text-primary)]">{formatReviewerName(review.name)}</p>
+              <p class="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">
                 <span class="text-amber-400">{starRow(review.rating)}</span>
                 <span class="ml-1">{review.date}</span>
               </p>

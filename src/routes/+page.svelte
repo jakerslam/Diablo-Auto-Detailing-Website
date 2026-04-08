@@ -281,7 +281,7 @@
         <Card className="diablo-surface">
           <CardHeader>
             <CardTitle>{reason.title}</CardTitle>
-            <CardDescription>{reason.description}</CardDescription>
+            <CardDescription className="text-[color:var(--text-muted)]">{reason.description}</CardDescription>
           </CardHeader>
         </Card>
       {/each}
@@ -297,10 +297,10 @@
         <Card>
           <CardHeader>
             <CardTitle>Included in all plans</CardTitle>
-            <CardDescription>Full detail baseline for one-time, monthly, and quarterly customers.</CardDescription>
+            <CardDescription className="text-[color:var(--text-muted)]">Full detail baseline for one-time, monthly, and quarterly customers.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul class="mt-1 space-y-3 text-white/90">
+            <ul class="mt-1 space-y-3 text-[color:var(--text-muted)]">
               {#each baseInclusions as item}
                 <li class="flex items-start gap-2">
                   <span class="mt-1.5 h-2 w-2 rounded-full bg-wash-400"></span>
@@ -313,12 +313,12 @@
         <Card>
           <CardHeader>
             <CardTitle>Service area coverage</CardTitle>
-            <CardDescription>We come to Walnut Creek and nearby communities.</CardDescription>
+              <CardDescription className="text-[color:var(--text-muted)]">We come to Walnut Creek and nearby communities.</CardDescription>
           </CardHeader>
           <CardContent>
             <div class="mt-2 flex flex-wrap gap-2">
               {#each serviceAreas as city}
-                <span class="rounded-full border border-white/20 px-3 py-1 text-xs text-white/90">{city}</span>
+                <span class="rounded-full border border-white/20 px-3 py-1 text-xs text-[color:var(--text-primary)]">{city}</span>
               {/each}
             </div>
           </CardContent>
@@ -350,7 +350,7 @@
               <CardDescription>{plan.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
-              <dl class="mt-4 space-y-2 text-sm text-white/80">
+              <dl class="mt-4 space-y-2 text-sm text-[color:var(--text-primary)]">
                 <div class="flex justify-between border-b border-white/10 pb-2">
                   <dt>Maximum rate</dt>
                   {#if plan.discount}
@@ -397,13 +397,13 @@
       <Card className="diablo-surface">
         <CardHeader className="items-center text-center">
           <CardTitle className="w-full">How it works</CardTitle>
-          <CardDescription className="w-full">Four step process used by our service team.</CardDescription>
+          <CardDescription className="w-full text-[color:var(--text-muted)]">Four step process used by our service team.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ol class="mt-2 space-y-4 text-white/80">
+          <ol class="mt-2 space-y-4 text-[color:var(--text-muted)]">
             {#each processSteps as step, index}
               <li>
-                <p class="text-sm font-semibold text-white/95">{index + 1}. {step}</p>
+                <p class="text-sm font-semibold text-[color:var(--text-primary)]">{index + 1}. {step}</p>
               </li>
             {/each}
           </ol>
@@ -416,7 +416,7 @@
         <CardHeader>
             <div class="flex flex-col items-center gap-1 text-center">
               <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
-              <CardDescription className="text-center">
+              <CardDescription className="text-center text-[color:var(--text-muted)]">
                 <a href={socialLinks.google} target="_blank" rel="noopener noreferrer" class="text-glow-300 underline">
                 View live Google profile
               </a>
@@ -433,7 +433,7 @@
       <Card className="diablo-surface">
         <CardHeader>
           <CardTitle>FAQ</CardTitle>
-          <CardDescription>Common questions before booking.</CardDescription>
+          <CardDescription className="text-[color:var(--text-muted)]">Common questions before booking.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3">
           {#each faqItems as item}
@@ -448,7 +448,7 @@
     <section id="quote" class="diablo-surface">
       <CardHeader>
         <CardTitle>Request a quote</CardTitle>
-        <CardDescription>Pricing is confirmed after your vehicle details and booking window are reviewed.</CardDescription>
+        <CardDescription className="text-[color:var(--text-muted)]">Pricing is confirmed after your vehicle details and booking window are reviewed.</CardDescription>
       </CardHeader>
       <CardContent>
         <form

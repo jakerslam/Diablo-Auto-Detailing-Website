@@ -4,4 +4,4 @@
   export let className = '';
 </script>
 
-<p class={cn('text-sm leading-relaxed text-white/74', className)}><slot /></p>
+<p class={cn('text-sm leading-relaxed', className)}><slot /></p>
