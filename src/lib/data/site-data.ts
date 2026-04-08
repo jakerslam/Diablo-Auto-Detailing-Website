@@ -40,7 +40,7 @@ export const businessProfile = {
   shortName: 'Diablo Auto Detailing',
   tagline: 'Mobile car detailing in Walnut Creek',
   phone: '(510) 631-1230',
-  website: 'http://diabloautodetailing.com',
+  website: 'https://diabloautodetailing.com',
   serviceArea: 'Walnut Creek, CA',
   neighborhoods: serviceAreas,
   priceRange: '$175-$275',

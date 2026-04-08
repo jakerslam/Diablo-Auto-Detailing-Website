@@ -56,3 +56,36 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify custom domain DNS and HTTPS
+        env:
+          DOMAIN: diabloautodetailing.com
+        run: |
+          if command -v dig >/dev/null 2>&1; then
+            a_records="$(dig +short "$DOMAIN" A || true)"
+            if [ -z "$a_records" ]; then
+              echo "::warning::No A records found for $DOMAIN. Add GitHub Pages A records (185.199.108.153, ... 185.199.111.153)."
+            else
+              echo "A records for $DOMAIN: $a_records"
+            fi
+
+            www_records="$(dig +short "www.$DOMAIN" CNAME || true)"
+            if [ -z "$www_records" ]; then
+              echo "::notice::Optional: No CNAME for www.$DOMAIN. Point www.$DOMAIN to jakerslam.github.io if desired."
+            else
+              echo "www.$DOMAIN CNAME: $www_records"
+            fi
+          else
+            echo "::notice::dig unavailable in runner; skipping DNS verification."
+          fi
+
+          if command -v curl >/dev/null 2>&1; then
+            status="$(curl -L --max-time 15 -o /tmp/diablo-domain.html -s -w '%{http_code}' "https://$DOMAIN/" || true)"
+            if [ "$status" = "200" ] || [ "$status" = "301" ] || [ "$status" = "302" ]; then
+              echo "https://$DOMAIN responds with HTTP $status"
+            else
+              echo "::warning::Unable to confirm HTTPS for https://$DOMAIN (status: ${status}). DNS propagation may still be in progress."
+            fi
+          else
+            echo "::notice::curl unavailable in runner; skipping HTTPS verification."
+          fi

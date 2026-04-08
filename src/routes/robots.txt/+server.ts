@@ -3,7 +3,7 @@ import { PUBLIC_SITE_URL } from '$env/static/public';
 
 export const prerender = true;
 
-const fallbackSiteUrl = 'http://diabloautodetailing.com';
+const fallbackSiteUrl = 'https://diabloautodetailing.com';
 
 export function GET() {
   const siteUrl = (PUBLIC_SITE_URL || fallbackSiteUrl).replace(/\/$/, '');

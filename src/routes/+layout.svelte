@@ -3,7 +3,7 @@
   import { businessProfile, googleReviews, faqItems, socialLinks, googlePhotos } from '$lib/data/site-data';
   import { servicePlans } from '$lib/data/pricing';
 
-  const fallbackSiteUrl = 'http://diabloautodetailing.com';
+  const fallbackSiteUrl = 'https://diabloautodetailing.com';
   const siteUrl = (import.meta.env.PUBLIC_SITE_URL || fallbackSiteUrl).replace(/\/$/, '');
   const normalizedBase = base === '/' ? '' : base;
   const canonicalUrl = `${siteUrl}${normalizedBase}/`;
