@@ -4,9 +4,13 @@
   import { servicePlans } from '$lib/data/pricing';
 
   const fallbackSiteUrl = 'https://diabloautodetailing.com';
-  const siteUrl = (import.meta.env.PUBLIC_SITE_URL || fallbackSiteUrl).replace(/\/$/, '');
+  const configuredSiteUrl = (import.meta.env.PUBLIC_SITE_URL || fallbackSiteUrl).replace(/\/$/, '');
   const normalizedBase = base === '/' ? '' : base;
-  const canonicalUrl = `${siteUrl}${normalizedBase}/`;
+  const canonicalBase = normalizedBase.startsWith('/') ? normalizedBase : `/${normalizedBase}`;
+  const hasBaseInUrl =
+    Boolean(canonicalBase) && configuredSiteUrl.toLowerCase().endsWith(canonicalBase.toLowerCase());
+  const canonicalRoot = hasBaseInUrl ? configuredSiteUrl.slice(0, -canonicalBase.length) : configuredSiteUrl;
+  const canonicalUrl = `${canonicalRoot}${canonicalBase}/`;
   const title = `${businessProfile.name} | Mobile Car Detailing in Walnut Creek & East Bay`;
   const description =
     'Diablo Auto Detailing provides mobile interior and exterior car detailing in Walnut Creek and nearby East Bay cities, with one-time and recurring plans plus local in-home pickup/drop-off options.';

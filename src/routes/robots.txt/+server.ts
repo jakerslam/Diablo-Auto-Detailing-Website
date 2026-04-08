@@ -6,9 +6,13 @@ export const prerender = true;
 const fallbackSiteUrl = 'https://diabloautodetailing.com';
 
 export function GET() {
-  const siteUrl = (PUBLIC_SITE_URL || fallbackSiteUrl).replace(/\/$/, '');
+  const configuredSiteUrl = (PUBLIC_SITE_URL || fallbackSiteUrl).replace(/\/$/, '');
   const normalizedBase = base === '/' ? '' : base;
-  const canonicalUrl = `${siteUrl}${normalizedBase}/`;
+  const canonicalBase = normalizedBase.startsWith('/') ? normalizedBase : `/${normalizedBase}`;
+  const hasBaseInUrl =
+    Boolean(canonicalBase) && configuredSiteUrl.toLowerCase().endsWith(canonicalBase.toLowerCase());
+  const canonicalRoot = hasBaseInUrl ? configuredSiteUrl.slice(0, -canonicalBase.length) : configuredSiteUrl;
+  const canonicalUrl = `${canonicalRoot}${canonicalBase}/`;
 
   return new Response(`User-agent: *
 Allow: /
