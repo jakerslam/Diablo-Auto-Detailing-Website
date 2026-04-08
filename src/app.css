@@ -130,3 +130,81 @@
     color: var(--google-star);
   }
 }
+
+@media (max-width: 480px) {
+  body,
+  .diablo-page {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  header .diablo-top-bar,
+  footer,
+  main {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .diablo-page > header > div {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .diablo-page > header > div > nav {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    overflow-x: auto;
+    width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 0.15rem;
+  }
+
+  .diablo-page > header > div > nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .diablo-page > header > div > nav a {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    white-space: nowrap;
+  }
+
+  .diablo-page > main > section > .diablo-surface,
+  .diablo-page > footer > div {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .diablo-surface {
+    @apply px-3 py-5;
+  }
+
+  .diablo-kicker {
+    @apply text-[10px] tracking-[0.16em];
+  }
+
+  .diablo-section-title {
+    @apply text-2xl leading-tight;
+  }
+
+  .diablo-subtitle {
+    @apply text-xs leading-relaxed;
+  }
+
+  .diablo-page .diablo-surface,
+  .diablo-page > footer > div,
+  .diablo-page > main,
+  .diablo-page > main > section,
+  .diablo-page > main > section > div,
+  .diablo-page > header > div,
+  .diablo-page > header + p {
+    width: 100%;
+    max-width: 100%;
+  }
+}
