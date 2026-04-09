@@ -635,7 +635,7 @@
                   pickPlan(plan.id);
                 }}
               >
-                Pick {plan.name}
+                {plan.id === 'one-time' ? 'Settle for one-time' : `Pick ${plan.name}`}
               </Button>
             </CardContent>
           </Card>
