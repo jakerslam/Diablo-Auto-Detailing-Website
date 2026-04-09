@@ -369,6 +369,10 @@
       included: true
     })),
     {
+      label: 'Reoccuring discount',
+      included: plan.id !== 'one-time'
+    },
+    {
       label: 'Exterior reservice guarentee',
       included: plan.id === 'monthly'
     }
