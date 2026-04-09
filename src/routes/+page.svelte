@@ -130,7 +130,7 @@
     pulseQuoteCta = !heroInView && !quoteInView;
 
     if (window.innerWidth > 768) {
-      showFloatingQuote = true;
+      showFloatingQuote = !(quoteInView || topbarInView);
       return;
     }
 
@@ -451,7 +451,7 @@
 </script>
 
 <div class="diablo-page flex min-h-screen flex-col">
-  <header id="topbar" class="sticky top-0 z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
+  <header id="topbar" class="z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
       <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
         <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-[4.5rem] w-[4.5rem] rounded-full object-cover shadow-lg shadow-black/25" />
@@ -860,6 +860,14 @@
       <p class="border-t border-white/10 pt-4 text-xs text-white/55">{footerNotes.join(' • ')}</p>
     </div>
   </footer>
+
+  <Button
+    href="#quote"
+    on:click={(event) => onSectionNav(event, 'quote', 'floating_desktop_cta', false)}
+    className={`fixed bottom-5 right-5 z-20 ${pulseQuoteCta ? 'diablo-cta-pulse' : ''} ${showFloatingQuote ? '' : 'hidden'} hidden md:inline-flex`}
+  >
+    Request Quote
+  </Button>
 
   <a
     href="#quote"
