@@ -369,7 +369,7 @@
       included: true
     })),
     {
-      label: 'Reoccuring discount',
+      label: 'Recurring discount',
       included: plan.id !== 'one-time'
     },
     {
