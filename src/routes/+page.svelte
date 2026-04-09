@@ -324,9 +324,16 @@
   ];
 
   const serviceProof = [
-    { label: 'Service radius', value: 'Serving Walnut Creek + nearby cities' },
+    { label: 'Service radius', value: 'Walnut Creek + nearby East Bay cities' },
     { label: 'Typical appointment', value: `${baseServiceHours} on-site` },
-    { label: 'How you book', value: 'No showroom visits required' }
+    { label: 'How you book', value: 'Mobile service, no shop visit required' }
+  ];
+
+  const trustProof = [
+    '5-star local customer reviews',
+    'Mobile service at home or work',
+    `${baseServiceHours} typical visit window`,
+    'Recurring discount available'
   ];
 
   const processSteps = [
@@ -340,17 +347,20 @@
     {
       title: 'Mobile-first convenience',
       description:
-        'We travel to your home, office, or parking spot in Walnut Creek and surrounding cities so you do not lose work time.'
+        'We travel to your home, office, or parking spot in Walnut Creek and surrounding cities so you do not lose work time.',
+      proof: 'We arrive with our own supplies and handle the detail on-site.'
     },
     {
       title: 'No hidden detail work',
       description:
-        'Every plan includes the same complete inside-and-out standard so your quote matches the real service scope.'
+        'Every plan includes the same complete inside-and-out standard so your quote matches the real service scope.',
+      proof: 'The same core interior and exterior work is included across every package.'
     },
     {
       title: 'Built for repeat service',
       description:
-        'Recurring plans give structured reminders and discounted pricing for better upkeep and fewer surprises.'
+        'Recurring plans give structured reminders and discounted pricing for better upkeep and fewer surprises.',
+      proof: 'Monthly and quarterly plans are designed to keep maintenance predictable.'
     }
   ];
 
@@ -362,6 +372,12 @@
 
   const getListPrice = (recommendedPrice: number, discount?: number) =>
     discount ? recommendedPrice + discount : recommendedPrice;
+
+  const getPlanFit = (planId: PlanType) => {
+    if (planId === 'monthly') return 'Best for commuters, family cars, and always-clean drivers';
+    if (planId === 'quarterly') return 'Best for regular upkeep without monthly commitment';
+    return 'Best for a first visit, a reset, or before selling';
+  };
 
   const getPlanComparisonItems = (plan: { id: PlanType; includedFeatures: string[] }) => [
     ...plan.includedFeatures.map((feature) => ({
@@ -488,15 +504,22 @@
         <div>
           <p class="diablo-kicker">MOBILE DETAILING IN WALNUT CREEK</p>
           <h1 class="diablo-hero-title mt-4 max-w-3xl text-3xl font-semibold leading-tight sm:text-5xl">
-            Premium detailing for drivers who want a spotless car without leaving their schedule behind
+            Mobile car detailing that keeps your vehicle clean without taking over your day
           </h1>
           <p class="mt-4 max-w-2xl text-[color:var(--text-primary)]">
             Our complete interior and exterior service runs in a 2-3 hour block and includes carpet shampooing,
             interior detailing, wheel cleaning, and a complimentary ceramic wax finish.
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta', false)}>Get My Quote</Button>
+            <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta', false)}>Request Quote</Button>
             <Button variant="outline" href="#plans" on:click={(event) => onSectionNav(event, 'plans', 'hero_plans', true)}>Compare Plans</Button>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-2">
+            {#each trustProof as item}
+              <span class="rounded-full border border-slate-300/70 bg-white/70 px-3 py-1.5 text-xs font-semibold text-slate-900 shadow-sm">
+                {item}
+              </span>
+            {/each}
           </div>
         </div>
         <div class="grid gap-3">
@@ -515,6 +538,9 @@
         <CardHeader>
           <div class="flex flex-col items-center gap-1 text-center">
             <CardTitle class="text-center">Reviews from satisfied customers</CardTitle>
+            <CardDescription className="text-[color:var(--text-muted)]">
+              Trusted by East Bay drivers who want convenient, high-quality recurring care.
+            </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
@@ -538,6 +564,7 @@
           <CardHeader>
             <CardTitle>{reason.title}</CardTitle>
             <CardDescription className="text-[color:var(--text-muted)]">{reason.description}</CardDescription>
+            <p class="text-sm font-semibold text-[color:var(--text-primary)]">{reason.proof}</p>
           </CardHeader>
         </Card>
       {/each}
@@ -569,7 +596,7 @@
         <Card className="sub-card">
           <CardHeader>
             <CardTitle>Service area coverage</CardTitle>
-              <CardDescription className="text-white/80">We come to Walnut Creek and nearby communities.</CardDescription>
+              <CardDescription className="text-white/80">Serving Walnut Creek, Danville, Alamo, Lafayette, Orinda, San Ramon, and nearby East Bay cities.</CardDescription>
           </CardHeader>
           <CardContent>
             <div class="mt-2 flex flex-wrap gap-2">
@@ -603,6 +630,7 @@
               <div class="mb-2 flex items-center justify-between gap-2">
                 <CardTitle>{plan.name}</CardTitle>
               </div>
+              <p class="text-sm font-semibold text-glow-300">{getPlanFit(plan.id)}</p>
               <CardDescription className="text-white/80">{plan.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
@@ -646,6 +674,14 @@
           </Card>
         {/each}
       </div>
+      <Card className="sub-card">
+        <CardHeader>
+          <CardTitle>Our service promise</CardTitle>
+          <CardDescription className="text-white/80">
+            Recurring plans get better pricing, steadier upkeep, and faster issue resolution if the exterior needs attention between scheduled visits.
+          </CardDescription>
+        </CardHeader>
+      </Card>
       <p class="diablo-subtitle">
         Baseline reference price: ${fallbackModelPrice} for typical vehicles.
       </p>
@@ -691,6 +727,9 @@
         <CardDescription className="text-[color:var(--text-muted)]">Pricing is confirmed after your vehicle details and booking window are reviewed.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div class="mb-5 rounded-2xl border border-[var(--surface-border)] bg-white/65 px-4 py-3 text-sm text-[color:var(--text-primary)]">
+          After you submit, we review your vehicle details, confirm the final price, and text or call you with scheduling options.
+        </div>
         <form
           class="mt-6 grid gap-4 md:grid-cols-2"
           action={ghlFormConfigured ? ghlFormEndpoint : undefined}
@@ -750,7 +789,7 @@
           <FormField id="vehicle_model" label="Vehicle model" required>
             <Input id="vehicle_model" name="vehicle_model" bind:value={form.vehicleModel} required />
           </FormField>
-          <FormField id="preferred_window" label="Preferred date window" className="md:col-span-2">
+          <FormField id="preferred_window" label="Preferred date window (optional)" className="md:col-span-2">
             <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
               <Input id="preferred_start_date" name="preferred_start_date" type="date" bind:value={form.preferredStartDate} />
               <span class="text-sm text-[color:var(--text-muted)]">to</span>
@@ -766,7 +805,7 @@
             </Select>
           </FormField>
 
-          <FormField id="message" label="Message" className="md:col-span-2">
+          <FormField id="message" label="Message (optional)" className="md:col-span-2">
             <Textarea
               rows={3}
               id="message"
@@ -776,7 +815,7 @@
             />
           </FormField>
 
-          <FormField id="best_contact_time" label="Best time to contact" className="md:col-span-2">
+          <FormField id="best_contact_time" label="Best time to contact (optional)" className="md:col-span-2">
             <Select id="best_contact_time" name="best_contact_time" bind:value={form.bestContactTime}>
               <option value="">Select a time</option>
               <option value="Morning">Morning</option>
