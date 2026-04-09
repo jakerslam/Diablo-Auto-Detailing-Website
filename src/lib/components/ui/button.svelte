@@ -39,7 +39,7 @@ const buttonVariants = cva(
 </script>
 
 {#if href}
-  <a {href} class={buttonClasses}><slot /></a>
+  <a {href} class={buttonClasses} on:click><slot /></a>
 {:else}
-  <button {type} class={buttonClasses} {disabled}><slot /></button>
+  <button {type} class={buttonClasses} {disabled} on:click><slot /></button>
 {/if}

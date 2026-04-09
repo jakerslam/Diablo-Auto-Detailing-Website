@@ -470,7 +470,7 @@
 
 <div class="diablo-page flex min-h-screen flex-col">
   <header id="topbar" class="z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8 md:flex-nowrap">
+    <div class="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8">
       <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
         <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-[4.5rem] w-[4.5rem] rounded-full object-cover shadow-lg shadow-black/25" />
         <div>
@@ -478,24 +478,27 @@
           <p class="text-xs text-white/65">Mobile Car Detailing in Walnut Creek</p>
         </div>
       </a>
-      <nav class="flex items-center gap-2 text-sm text-white/85">
-        <a href="#plans" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'plans', 'nav_plans')}>
+      <nav class="flex items-center justify-center gap-2 text-sm text-white/85">
+        <a href="#plans" class="rounded-full px-3 py-2 transition-colors duration-200 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'plans', 'nav_plans')}>
           Plans
         </a>
-        <a href="#how" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'how', 'nav_how')}>
+        <a href="#how" class="rounded-full px-3 py-2 transition-colors duration-200 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'how', 'nav_how')}>
           Process
         </a>
-        <a href="#reviews" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'reviews', 'nav_reviews')}>
+        <a href="#reviews" class="rounded-full px-3 py-2 transition-colors duration-200 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'reviews', 'nav_reviews')}>
           Reviews
         </a>
-        <a href="#faq" class="rounded-full px-3 py-2 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'faq', 'nav_faq')}>
+        <a href="#faq" class="rounded-full px-3 py-2 transition-colors duration-200 hover:text-glow-300" on:click={(event) => onSectionNav(event, 'faq', 'nav_faq')}>
           FAQ
         </a>
       </nav>
+      <a href={`tel:${phone}`} class="inline-flex items-center justify-end gap-2 text-sm font-semibold text-white transition-colors duration-200 hover:text-glow-300">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 fill-current">
+          <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V21a1 1 0 0 1-1 1A17 17 0 0 1 3 5a1 1 0 0 1 1-1h3.49a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.24 1.02l-2.2 2.2Z" />
+        </svg>
+        <span>{phone}</span>
+      </a>
     </div>
-    <p class="mx-auto max-w-6xl pb-2 px-4 text-center text-sm text-white/65 sm:px-6 lg:px-8">
-      Call or text <a href={`tel:${phone}`} class="text-glow-300 underline">{phone}</a>
-    </p>
   </header>
 
   <main id="top" class="mx-auto mt-8 max-w-6xl flex-1 space-y-10 px-4 sm:px-6 lg:px-8">
