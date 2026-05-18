@@ -59,6 +59,7 @@
   let showFloatingQuote = true;
   let pulseQuoteCta = false;
   let externalTrackingSubmitted = false;
+  let quoteSubmitLocked = false;
   const googlePlaceId = import.meta.env.PUBLIC_GOOGLE_PLACE_ID || '';
   const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
@@ -314,6 +315,13 @@
   const ghlFormConfigured = Boolean(ghlFormEndpoint && !ghlFormEndpoint.includes('example.com'));
 
   function handleQuoteSubmit(event: SubmitEvent) {
+    if (quoteSubmitLocked) {
+      event.preventDefault();
+      return;
+    }
+
+    quoteSubmitLocked = true;
+
     if (ghlFormConfigured) return;
 
     event.preventDefault();
@@ -875,7 +883,10 @@
             </div>
           </fieldset>
 
-          <FormSubmit value="Request Quote" />
+          <FormSubmit
+            value={quoteSubmitLocked ? 'Request Submitted!' : 'Request Quote'}
+            disabled={quoteSubmitLocked}
+          />
         </form>
       </CardContent>
     </section>
