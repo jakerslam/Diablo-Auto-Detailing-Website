@@ -60,7 +60,7 @@ export const businessProfile = {
 };
 
 export const socialLinks = {
-  instagram: 'https://instagram.com/diabloautodetailing',
+  instagram: 'https://instagram.com/Diablo.auto.detailing',
   facebook: 'https://facebook.com/diabloautodetailing',
   google: 'https://share.google/e0LNvlycaeh0Vtb9s',
   yelp: 'https://www.yelp.com/search?find_desc=Diablo+Auto+Detailing'
