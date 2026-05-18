@@ -746,9 +746,6 @@
         <CardDescription className="text-[color:var(--text-muted)]">Pricing is confirmed after your vehicle details and booking window are reviewed.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div class="mb-5 rounded-2xl border border-[var(--surface-border)] bg-white/65 px-4 py-3 text-sm text-[color:var(--text-primary)]">
-          After you submit, we review your vehicle details, confirm the final price, and text or call you with scheduling options.
-        </div>
         <form
           id="quote-request-form"
           name="quote_request"
@@ -757,20 +754,6 @@
           method={ghlFormConfigured ? 'POST' : undefined}
           on:submit={handleQuoteSubmit}
         >
-          {#if !ghlFormConfigured}
-            <p class="md:col-span-2 rounded-2xl border border-[var(--surface-border)] bg-white/65 px-4 py-3 text-sm text-[color:var(--text-primary)]">
-              Test mode is active. Submit this form to validate HighLevel External Tracking without enabling a paid
-              webhook trigger.
-            </p>
-          {/if}
-
-          {#if externalTrackingSubmitted && !ghlFormConfigured}
-            <p class="md:col-span-2 rounded-2xl border border-emerald-300/70 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-              Test submission sent from the page. Check HighLevel Contacts or Forms Submissions to confirm it was
-              captured by External Tracking.
-            </p>
-          {/if}
-
           <HiddenInput name="source" value="Diablo Auto Detailing Website" />
           <HiddenInput name="selected_plan" value={form.plan} />
 
