@@ -465,14 +465,14 @@
     { name: 'Google', href: socialLinks.google, icon: 'https://cdn.simpleicons.org/google/FFFFFF' },
     { name: 'Yelp', href: socialLinks.yelp, icon: 'https://cdn.simpleicons.org/yelp/FFFFFF' }
   ];
-  const brandLogoPath = `${import.meta.env.BASE_URL || '/'}diablo-logo.svg`;
+  const brandLogoPath = `${import.meta.env.BASE_URL || '/'}diablo-logo.jpg`;
 </script>
 
 <div class="diablo-page flex min-h-screen flex-col">
   <header id="topbar" class="z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
     <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8">
       <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
-        <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-[4.5rem] w-[4.5rem] rounded-full object-cover shadow-lg shadow-black/25" />
+        <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-[4.5rem] w-[4.5rem] rounded-full bg-[#0b0908] object-contain p-1 shadow-lg shadow-black/25" />
         <div>
           <p class="text-lg font-semibold tracking-wide">Diablo Auto Detailing</p>
           <p class="text-xs text-white/65">Mobile Car Detailing in Walnut Creek</p>
