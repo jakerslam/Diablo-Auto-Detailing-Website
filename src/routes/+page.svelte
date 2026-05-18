@@ -58,6 +58,7 @@
   let photoItems: { src: string; alt?: string }[] = [];
   let showFloatingQuote = true;
   let pulseQuoteCta = false;
+  let externalTrackingSubmitted = false;
   const googlePlaceId = import.meta.env.PUBLIC_GOOGLE_PLACE_ID || '';
   const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
@@ -311,6 +312,13 @@
   const ghlFormEndpoint =
     typeof import.meta !== 'undefined' ? import.meta.env.PUBLIC_GHL_FORM_ENDPOINT || '' : '';
   const ghlFormConfigured = Boolean(ghlFormEndpoint && !ghlFormEndpoint.includes('example.com'));
+
+  function handleQuoteSubmit(event: SubmitEvent) {
+    if (ghlFormConfigured) return;
+
+    event.preventDefault();
+    externalTrackingSubmitted = true;
+  }
 
   const planIds = servicePlans.map((plan) => plan.id);
   const planOptions = servicePlans.map((plan) => ({ value: plan.id, label: plan.name }));
@@ -734,14 +742,24 @@
           After you submit, we review your vehicle details, confirm the final price, and text or call you with scheduling options.
         </div>
         <form
+          id="quote-request-form"
+          name="quote_request"
           class="mt-6 grid gap-4 md:grid-cols-2"
           action={ghlFormConfigured ? ghlFormEndpoint : undefined}
           method={ghlFormConfigured ? 'POST' : undefined}
+          on:submit={handleQuoteSubmit}
         >
           {#if !ghlFormConfigured}
-            <p class="md:col-span-2 text-sm text-amber-200">
-              Form endpoint is not configured yet. Set PUBLIC_GHL_FORM_ENDPOINT in repository secret/env to capture this
-              submission.
+            <p class="md:col-span-2 rounded-2xl border border-[var(--surface-border)] bg-white/65 px-4 py-3 text-sm text-[color:var(--text-primary)]">
+              Test mode is active. Submit this form to validate HighLevel External Tracking without enabling a paid
+              webhook trigger.
+            </p>
+          {/if}
+
+          {#if externalTrackingSubmitted && !ghlFormConfigured}
+            <p class="md:col-span-2 rounded-2xl border border-emerald-300/70 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+              Test submission sent from the page. Check HighLevel Contacts or Forms Submissions to confirm it was
+              captured by External Tracking.
             </p>
           {/if}
 
@@ -857,7 +875,7 @@
             </div>
           </fieldset>
 
-          <FormSubmit value="Request Quote" disabled={!ghlFormConfigured} />
+          <FormSubmit value="Request Quote" />
         </form>
       </CardContent>
     </section>
