@@ -26,7 +26,7 @@
     {max}
     {autocomplete}
     class={cn(
-      'h-11 w-full rounded-xl border border-white/20 bg-slate-900/45 px-3 py-2 text-sm text-white placeholder:text-white/55 focus:outline-none focus:ring-2 focus:ring-glow-500/55 disabled:cursor-not-allowed disabled:opacity-60',
+      'h-11 w-full rounded-xl border border-[var(--stroke)] bg-[var(--bg)] px-3 py-2 text-sm text-[color:var(--text-primary)] placeholder:text-[color:var(--text-subtle)] focus:outline-none focus:ring-2 focus:ring-glow-500/55 disabled:cursor-not-allowed disabled:opacity-60',
       className
     )}
   on:input

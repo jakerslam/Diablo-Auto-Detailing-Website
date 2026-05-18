@@ -476,10 +476,10 @@
   const phone = businessProfile.phone;
 
   const socialIconLinks = [
-    { name: 'Instagram', href: socialLinks.instagram, icon: 'https://cdn.simpleicons.org/instagram/FFFFFF' },
-    { name: 'Facebook', href: socialLinks.facebook, icon: 'https://cdn.simpleicons.org/facebook/FFFFFF' },
-    { name: 'Google', href: socialLinks.google, icon: 'https://cdn.simpleicons.org/google/FFFFFF' },
-    { name: 'Yelp', href: socialLinks.yelp, icon: 'https://cdn.simpleicons.org/yelp/FFFFFF' }
+    { name: 'Instagram', href: socialLinks.instagram, icon: 'https://cdn.simpleicons.org/instagram/FFFFFF', hidden: false, target: '_blank' },
+    { name: 'Facebook', href: socialLinks.facebook, icon: 'https://cdn.simpleicons.org/facebook/FFFFFF', hidden: true, target: '' },
+    { name: 'Google', href: socialLinks.google, icon: 'https://cdn.simpleicons.org/google/FFFFFF', hidden: false, target: '_blank' },
+    { name: 'Yelp', href: socialLinks.yelp, icon: 'https://cdn.simpleicons.org/yelp/FFFFFF', hidden: true, target: '' }
   ];
   const brandLogoPath = `${import.meta.env.BASE_URL || '/'}diablo-logo.jpg`;
 </script>
@@ -901,10 +901,10 @@
             {#each socialIconLinks as social}
               <a
                 href={social.href}
-                target="_blank"
+                target={social.target}
                 rel="noopener noreferrer"
                 aria-label={social.name}
-                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                class={`inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 ${social.hidden ? 'hidden' : ''}`}
               >
                 <img src={social.icon} alt="" class="h-5 w-5" />
               </a>
