@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import { servicePlans, baseServiceHours, fallbackModelPrice } from '$lib/data/pricing';
   import {
     serviceAreas,
