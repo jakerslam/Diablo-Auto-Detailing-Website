@@ -513,7 +513,7 @@
         <span>{phone}</span>
       </a>
       </div>
-      <nav class="flex items-center justify-start gap-2 overflow-x-auto text-sm text-white/85 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:justify-center">
+      <nav class="mx-auto flex w-full items-center justify-center gap-2 overflow-x-auto text-sm text-white/85 lg:absolute lg:left-1/2 lg:w-auto lg:-translate-x-1/2 lg:justify-center">
         <a href="#plans" class="rounded-full px-3 py-2 transition-all duration-200 hover:text-white hover:drop-shadow-[0_0_10px_rgba(245,158,11,0.55)]" on:click={(event) => onSectionNav(event, 'plans', 'nav_plans')}>
           Plans
         </a>
