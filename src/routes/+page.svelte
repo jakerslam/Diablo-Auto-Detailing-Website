@@ -123,20 +123,31 @@
     return rect.top < window.innerHeight && rect.bottom > 0;
   };
 
+  const isAnyQuoteCtaVisible = () => {
+    if (typeof window === 'undefined') return false;
+
+    const quoteButtons = document.querySelectorAll<HTMLElement>('[data-quote-cta-static="true"]');
+    return Array.from(quoteButtons).some((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    });
+  };
+
   function updateQuoteCtaState() {
     if (typeof window === 'undefined') return;
 
     const heroInView = isElementInViewport('hero');
     const quoteInView = isElementInViewport('quote');
     const topbarInView = isElementInViewport('topbar');
+    const otherQuoteCtaInView = isAnyQuoteCtaVisible();
     pulseQuoteCta = !heroInView && !quoteInView;
 
     if (window.innerWidth > 768) {
-      showFloatingQuote = !(quoteInView || topbarInView);
+      showFloatingQuote = !(quoteInView || topbarInView || otherQuoteCtaInView);
       return;
     }
 
-    showFloatingQuote = !(quoteInView || topbarInView);
+    showFloatingQuote = !(quoteInView || topbarInView || otherQuoteCtaInView);
   }
 
   const buildReviewPhotoItems = (reviews: ReviewData[]) => {
@@ -530,7 +541,7 @@
             interior detailing, wheel cleaning, and a complimentary ceramic wax finish.
           </p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#quote" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta', false)}>Request Quote</Button>
+            <Button href="#quote" data-quote-cta-static="true" on:click={(event) => onSectionNav(event, 'quote', 'hero_cta', false)}>Request Quote</Button>
             <Button variant="outline" href="#plans" on:click={(event) => onSectionNav(event, 'plans', 'hero_plans', true)}>Compare Plans</Button>
           </div>
           <div class="mt-6 flex flex-wrap gap-2">
@@ -564,15 +575,6 @@
         </CardHeader>
         <CardContent>
           <ReviewCarousel reviews={reviewItems} />
-          <div class="mt-5">
-            {#if photoItems.length > 0}
-              <GooglePhotoCarousel photos={photoItems} reverseDirection={true} />
-            {:else}
-              <div class="rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-5 text-center text-sm text-[color:var(--text-muted)]">
-                No photos avaiable
-              </div>
-            {/if}
-          </div>
         </CardContent>
       </Card>
     </section>
@@ -892,7 +894,7 @@
             <a href="#how" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'how', 'footer_how')}>Process</a>
             <a href="#reviews" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'reviews', 'footer_reviews')}>Reviews</a>
             <a href="#faq" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'faq', 'footer_faq')}>FAQ</a>
-            <a href="#quote" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'quote', 'footer_quote', false)}>Request Quote</a>
+            <a href="#quote" data-quote-cta-static="true" class="hover:text-glow-300" on:click={(event) => onSectionNav(event, 'quote', 'footer_quote', false)}>Request Quote</a>
           </nav>
         </div>
         <div>

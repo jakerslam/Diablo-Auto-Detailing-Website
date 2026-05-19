@@ -12,6 +12,7 @@
 
   const MAX_QUEUE_SIZE = 30;
   const REVIEW_ANIMATION_UNIT = 0.8;
+  const DESKTOP_REVIEW_SPEED_MULTIPLIER = 0.7;
   const MOBILE_REVIEW_SPEED_MULTIPLIER = 3;
 
   let visibleCount = 1;
@@ -66,7 +67,7 @@
 
   const getReviewSpeed = () => {
     if (typeof window === 'undefined') return 1;
-    return window.innerWidth <= 768 ? MOBILE_REVIEW_SPEED_MULTIPLIER : 1;
+    return window.innerWidth <= 768 ? MOBILE_REVIEW_SPEED_MULTIPLIER : DESKTOP_REVIEW_SPEED_MULTIPLIER;
   };
 
   const updateCarouselMetrics = () => {
