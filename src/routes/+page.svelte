@@ -497,15 +497,23 @@
 
 <div class="diablo-page flex min-h-screen flex-col">
   <header id="topbar" class="z-20 w-full bg-[rgba(6,11,22,0.75)] pb-2 backdrop-blur-md">
-    <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8">
+    <div class="relative mx-auto flex max-w-6xl flex-col gap-3 border-b border-white/10 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div class="flex items-center justify-between gap-3">
       <a href="#top" on:click={(event) => onSectionNav(event, 'top', 'nav_top', false)} class="group inline-flex items-center gap-3">
         <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-[4.5rem] w-[4.5rem] rounded-full bg-[#0b0908] object-contain p-1 shadow-lg shadow-black/25" />
         <div>
           <p class="text-lg font-semibold tracking-wide">Diablo Auto Detailing</p>
-          <p class="text-xs text-white/65">Mobile Car Detailing in the East Bay</p>
+          <p class="hidden text-xs text-white/65 sm:block">Mobile Car Detailing in the East Bay</p>
         </div>
       </a>
-      <nav class="absolute left-1/2 flex -translate-x-1/2 items-center justify-center gap-2 text-sm text-white/85">
+      <a href={`tel:${phone}`} class="inline-flex items-center justify-end gap-2 text-sm font-semibold text-white transition-colors duration-200 hover:text-glow-300 lg:hidden">
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 fill-current">
+          <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V21a1 1 0 0 1-1 1A17 17 0 0 1 3 5a1 1 0 0 1 1-1h3.49a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.24 1.02l-2.2 2.2Z" />
+        </svg>
+        <span>{phone}</span>
+      </a>
+      </div>
+      <nav class="flex items-center justify-start gap-2 overflow-x-auto text-sm text-white/85 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:justify-center">
         <a href="#plans" class="rounded-full px-3 py-2 transition-all duration-200 hover:text-white hover:drop-shadow-[0_0_10px_rgba(245,158,11,0.55)]" on:click={(event) => onSectionNav(event, 'plans', 'nav_plans')}>
           Plans
         </a>
@@ -519,7 +527,7 @@
           FAQ
         </a>
       </nav>
-      <a href={`tel:${phone}`} class="inline-flex items-center justify-end gap-2 text-sm font-semibold text-white transition-colors duration-200 hover:text-glow-300">
+      <a href={`tel:${phone}`} class="hidden items-center justify-end gap-2 text-sm font-semibold text-white transition-colors duration-200 hover:text-glow-300 lg:inline-flex">
         <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 fill-current">
           <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V21a1 1 0 0 1-1 1A17 17 0 0 1 3 5a1 1 0 0 1 1-1h3.49a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.24 1.02l-2.2 2.2Z" />
         </svg>
@@ -758,6 +766,10 @@
         >
           <HiddenInput name="source" value="Diablo Auto Detailing Website" />
           <HiddenInput name="selected_plan" value={form.plan} />
+          <HiddenInput
+            name="car_info"
+            value={[form.vehicleYear, form.vehicleMake, form.vehicleModel].filter(Boolean).join(' ').trim()}
+          />
 
           <FormField id="first_name" label="First name" required>
             <Input id="first_name" name="first_name" bind:value={form.firstName} required />
