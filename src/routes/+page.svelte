@@ -768,7 +768,7 @@
           <HiddenInput name="selected_plan" value={form.plan} />
           <HiddenInput
             name="company_name"
-            value={[form.vehicleYear, form.vehicleMake, form.vehicleModel].filter(Boolean).join(' ').trim()}
+            value={form.vehicleModel}
           />
 
           <FormField id="first_name" label="First name" required>
