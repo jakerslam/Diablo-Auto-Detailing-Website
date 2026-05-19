@@ -767,7 +767,7 @@
           <HiddenInput name="source" value="Diablo Auto Detailing Website" />
           <HiddenInput name="selected_plan" value={form.plan} />
           <HiddenInput
-            name="car"
+            name="company_name"
             value={[form.vehicleYear, form.vehicleMake, form.vehicleModel].filter(Boolean).join(' ').trim()}
           />
 
