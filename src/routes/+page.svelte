@@ -502,7 +502,7 @@
         <img src={brandLogoPath} alt="Diablo Auto Detailing logo" class="h-[4.5rem] w-[4.5rem] rounded-full bg-[#0b0908] object-contain p-1 shadow-lg shadow-black/25" />
         <div>
           <p class="text-lg font-semibold tracking-wide">Diablo Auto Detailing</p>
-          <p class="text-xs text-white/65">Mobile Car Detailing in Walnut Creek</p>
+          <p class="text-xs text-white/65">Mobile Car Detailing in the East Bay</p>
         </div>
       </a>
       <nav class="absolute left-1/2 flex -translate-x-1/2 items-center justify-center gap-2 text-sm text-white/85">

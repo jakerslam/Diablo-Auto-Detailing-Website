@@ -26,12 +26,13 @@ export const faqItems = [
     answer: 'Most appointments take 2-3 hours depending on vehicle condition and size.'
   },
   {
-    question: 'Do I need to provide water or power?',
-    answer: 'No. Our team brings what we need to complete the service at your location.'
+    question: "What if I don't have power or water for you to hook up to?",
+    answer: 'We can bring our own!'
   },
   {
     question: 'How do the recurring plans work?',
-    answer: 'Recurring plans are scheduled with your preferred cadence. You get savings on each visit and we share your confirmed schedule and confirmation texts.'
+    answer:
+      'We do a 6-12 month trial period. If you have to stop during the trial period we just ask for the original discount off the first service, and you end up paying for a one-time.'
   }
 ];
 
