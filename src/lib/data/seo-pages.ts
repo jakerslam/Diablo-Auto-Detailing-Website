@@ -137,5 +137,69 @@ export const seoLandingPages: SeoLandingPage[] = [
       'Customers on monthly and quarterly recurring plans often benefit most from consistent ceramic wax touch-ups because the vehicle is maintained on a regular schedule.'
     ],
     bullets: ['Complimentary ceramic wax', 'Included in full detailing service', 'Helpful between recurring visits']
+  },
+  {
+    slug: 'lafayette-mobile-car-detailing',
+    title: 'Lafayette Mobile Car Detailing',
+    metaTitle: 'Lafayette Mobile Car Detailing | Diablo Auto Detailing',
+    metaDescription:
+      'Mobile car detailing in Lafayette, CA for interior and exterior cleaning, ceramic wax, wheel cleaning, and recurring maintenance service.',
+    heading: 'Mobile car detailing in Lafayette',
+    intro:
+      'Lafayette drivers can schedule Diablo Auto Detailing for convenient on-site service that covers both interior and exterior detailing in one visit.',
+    body: [
+      'Our Lafayette appointments are designed for commuters, family vehicles, and anyone who wants recurring maintenance without a shop drop-off.',
+      'Each service can include interior detailing, carpet shampooing, hand wash service, wheel cleaning, vacuuming, glass cleaning, and ceramic wax.',
+      'Lafayette customers can choose monthly, quarterly, or one-time scheduling depending on how often they want detailing support.'
+    ],
+    bullets: ['Lafayette mobile appointments', 'Interior and exterior detailing', 'Recurring or one-time service']
+  },
+  {
+    slug: 'moraga-mobile-car-detailing',
+    title: 'Moraga Mobile Car Detailing',
+    metaTitle: 'Moraga Mobile Car Detailing | Diablo Auto Detailing',
+    metaDescription:
+      'Book mobile car detailing in Moraga for interior shampooing, hand wash service, wheel cleaning, and recurring East Bay vehicle maintenance.',
+    heading: 'Mobile car detailing in Moraga',
+    intro:
+      'Moraga vehicle owners can book Diablo Auto Detailing for mobile service at home or work with the same consistent detail scope across plans.',
+    body: [
+      'Moraga customers often use this service when they want a cleaner vehicle without spending extra time getting to and from a detail shop.',
+      'Appointments can include interior detailing, carpet shampooing, exterior hand wash, wheel cleaning, vacuuming, glass cleaning, and ceramic wax.',
+      'Monthly and quarterly recurring plans are available in Moraga for drivers who want easier long-term upkeep.'
+    ],
+    bullets: ['Moraga on-site detailing', 'Recurring maintenance plans', '2-3 hour typical appointments']
+  },
+  {
+    slug: 'one-time-car-detailing',
+    title: 'One-Time Car Detailing',
+    metaTitle: 'One-Time Car Detailing in Walnut Creek & East Bay | Diablo Auto Detailing',
+    metaDescription:
+      'One-time mobile car detailing in Walnut Creek and the East Bay for drivers who want a complete interior and exterior reset with no recurring commitment.',
+    heading: 'One-time car detailing for a full reset',
+    intro:
+      'One-time mobile detailing is ideal for drivers who want a deep vehicle refresh, are preparing to sell a car, or want to test the service before starting a recurring plan.',
+    body: [
+      'The one-time package includes the same full detail scope as recurring plans, including interior detailing, carpet shampooing, hand wash service, wheel cleaning, and ceramic wax.',
+      'This option is popular for customers who have let a vehicle build up dust, spills, pet hair, or exterior grime and want a cleaner baseline again.',
+      'One-time detailing is also a practical fit for seasonal cleanups, post-road-trip resets, and pre-sale vehicle prep.'
+    ],
+    bullets: ['No recurring commitment', 'Full interior and exterior detail', 'Good for resets and pre-sale cleanups']
+  },
+  {
+    slug: 'wheel-cleaning-mobile-detailing',
+    title: 'Wheel Cleaning Mobile Detailing',
+    metaTitle: 'Wheel Cleaning Mobile Detailing in Walnut Creek & East Bay | Diablo Auto Detailing',
+    metaDescription:
+      'Mobile detailing with full wheel cleaning in Walnut Creek and the East Bay for drivers who want a cleaner finish inside and out.',
+    heading: 'Mobile detailing with full wheel cleaning',
+    intro:
+      'Diablo Auto Detailing includes full wheel cleaning as part of its mobile detailing service for customers who want a more complete exterior result.',
+    body: [
+      'Wheel cleaning helps improve the overall finished look of the vehicle and is part of the same full-detail service scope across plans.',
+      'This is especially useful for vehicles that pick up visible brake dust, road grime, and buildup from daily commuting around the East Bay.',
+      'Wheel cleaning is paired with hand wash service, interior detailing, vacuuming, glass cleaning, and ceramic wax in the standard mobile detail package.'
+    ],
+    bullets: ['Full wheel cleaning included', 'Exterior finish improvement', 'Part of every plan']
   }
 ];
