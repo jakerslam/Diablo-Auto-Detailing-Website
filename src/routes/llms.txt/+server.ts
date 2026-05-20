@@ -1,6 +1,7 @@
 import { base } from '$app/paths';
 import { servicePlans } from '$lib/data/pricing';
 import { businessProfile, faqItems, googleReviews, socialLinks } from '$lib/data/site-data';
+import { seoLandingPages } from '$lib/data/seo-pages';
 import { PUBLIC_SITE_URL } from '$env/static/public';
 
 export const prerender = true;
@@ -33,6 +34,9 @@ export function GET() {
   const faqLines = faqItems.slice(0, 6).map((item) => `- ${item.question}: ${item.answer}`).join('\n');
   const reviewLines = formatReviewBlock();
   const areas = businessProfile.neighborhoods.join(', ');
+  const landingPageLines = seoLandingPages
+    .map((page) => `- ${page.title}: ${canonicalUrl}${page.slug}`)
+    .join('\n');
 
   const payload = `# ${businessProfile.name}
 
@@ -54,6 +58,9 @@ What we do:
 
 Pricing:
 ${planLines}
+
+Landing Pages:
+${landingPageLines}
 
 Common Questions:
 ${faqLines}

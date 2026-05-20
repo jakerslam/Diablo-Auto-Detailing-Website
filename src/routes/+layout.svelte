@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import { businessProfile, googleReviews, faqItems, socialLinks, googlePhotos } from '$lib/data/site-data';
+  import { page } from '$app/stores';
+  import { businessProfile, googleReviews, faqItems, socialLinks } from '$lib/data/site-data';
   import { servicePlans } from '$lib/data/pricing';
 
   const fallbackSiteUrl = 'https://diabloautodetailing.com';
@@ -10,11 +11,13 @@
   const hasBaseInUrl =
     Boolean(canonicalBase) && configuredSiteUrl.toLowerCase().endsWith(canonicalBase.toLowerCase());
   const canonicalRoot = hasBaseInUrl ? configuredSiteUrl.slice(0, -canonicalBase.length) : configuredSiteUrl;
-  const canonicalUrl = `${canonicalRoot}${canonicalBase}/`;
-  const brandLogoUrl = `${canonicalUrl}diablo-logo.jpg`;
-  const title = `${businessProfile.name} | Mobile Car Detailing in Walnut Creek & East Bay`;
+  const siteRootUrl = `${canonicalRoot}${canonicalBase}/`;
+  const brandLogoUrl = `${siteRootUrl}diablo-logo.jpg`;
+  $: currentPath = $page.url.pathname === '/' ? '' : $page.url.pathname;
+  $: canonicalUrl = `${canonicalRoot}${currentPath || canonicalBase || '/'}`.replace(/(?<!:)\/{2,}/g, '/');
+  const title = `${businessProfile.name} | Mobile Car Detailing in Walnut Creek, Danville & East Bay`;
   const description =
-    'Diablo Auto Detailing provides mobile interior and exterior car detailing in Walnut Creek and nearby East Bay cities, with one-time and recurring plans plus local in-home pickup/drop-off options.';
+    'Diablo Auto Detailing provides mobile car detailing in Walnut Creek, Danville, Alamo, and nearby East Bay cities, including interior detailing, hand wash service, wheel cleaning, ceramic wax, and recurring maintenance plans.';
 
   const address = businessProfile.address;
   const addressString = `${address.addressLocality}, ${address.addressRegion}, ${address.addressCountry}`;
@@ -46,7 +49,7 @@
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    '@id': `${canonicalUrl}#faq`,
+    '@id': `${siteRootUrl}#faq`,
     mainEntity: faqItems.map((item) => ({
       '@type': 'Question',
       name: item.question,
@@ -78,10 +81,10 @@
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'AutomotiveBusiness',
-    '@id': `${canonicalUrl}#business`,
+    '@id': `${siteRootUrl}#business`,
     name: businessProfile.name,
-    url: canonicalUrl,
-    image: googlePhotos[0]?.url || brandLogoUrl,
+    url: siteRootUrl,
+    image: brandLogoUrl,
     logo: brandLogoUrl,
     telephone: businessProfile.phone,
     description: businessProfile.description,
@@ -129,12 +132,12 @@
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': `${canonicalUrl}#website`,
-    url: canonicalUrl,
+    '@id': `${siteRootUrl}#website`,
+    url: siteRootUrl,
     name: businessProfile.shortName,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${canonicalUrl}?q={search_term_string}`,
+      target: `${siteRootUrl}?q={search_term_string}`,
       'query-input': 'required name=search_term_string'
     }
   };
@@ -142,9 +145,9 @@
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': `${canonicalUrl}#organization`,
+    '@id': `${siteRootUrl}#organization`,
     name: businessProfile.name,
-    url: canonicalUrl,
+    url: siteRootUrl,
     telephone: businessProfile.phone,
     areaServed: areasServed,
     sameAs: [socialLinks.instagram, socialLinks.facebook, socialLinks.google, socialLinks.yelp]
@@ -161,7 +164,7 @@
   <meta name="description" content={description} />
   <meta
     name="keywords"
-    content="mobile car detailing Walnut Creek, auto detailing Walnut Creek, mobile car detailing Danville, detailing service Walnut Creek, interior car detailing, exterior detailing, recurring detailing plans, mobile auto detailing California"
+    content="mobile car detailing Walnut Creek, mobile car detailing Danville, mobile car detailing Alamo, East Bay mobile detailing, interior car detailing Walnut Creek, monthly car detailing East Bay, recurring car detailing Walnut Creek"
   />
   <meta name="robots" content="index, follow" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -174,13 +177,13 @@
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={googlePhotos[0]?.url || brandLogoUrl} />
+  <meta property="og:image" content={brandLogoUrl} />
   <meta property="og:image:alt" content="Diablo Auto Detailing logo" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@diabloautodetailing" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={googlePhotos[0]?.url || brandLogoUrl} />
+  <meta name="twitter:image" content={brandLogoUrl} />
   <link rel="icon" href={`${base}/diablo-logo.jpg`} type="image/jpeg" />
   <link rel="apple-touch-icon" href={`${base}/diablo-logo.jpg`} />
   <link rel="canonical" href={canonicalUrl} />

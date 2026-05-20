@@ -29,7 +29,6 @@
   import Select from '$lib/components/ui/select.svelte';
   import AccordionItem from '$lib/components/ui/accordion-item.svelte';
   import ReviewCarousel from '$lib/components/ui/review-carousel.svelte';
-  import GooglePhotoCarousel from '$lib/components/ui/google-photo-carousel.svelte';
 
   import '../app.css';
 
@@ -58,7 +57,6 @@
   let photoItems: { src: string; alt?: string }[] = [];
   let showFloatingQuote = true;
   let pulseQuoteCta = false;
-  let externalTrackingSubmitted = false;
   let quoteSubmitLocked = false;
   const googlePlaceId = import.meta.env.PUBLIC_GOOGLE_PLACE_ID || '';
   const googleMapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || '';
@@ -336,7 +334,6 @@
     if (ghlFormConfigured) return;
 
     event.preventDefault();
-    externalTrackingSubmitted = true;
   }
 
   const planIds = servicePlans.map((plan) => plan.id);

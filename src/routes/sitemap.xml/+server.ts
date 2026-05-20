@@ -1,5 +1,6 @@
 import { base } from '$app/paths';
 import { PUBLIC_SITE_URL } from '$env/static/public';
+import { seoLandingPages } from '$lib/data/seo-pages';
 
 export const prerender = true;
 
@@ -15,14 +16,31 @@ export function GET() {
   const canonicalUrl = `${canonicalRoot}${canonicalBase}/`;
   const today = new Date().toISOString().split('T')[0];
 
+  const urls = [
+    {
+      loc: canonicalUrl,
+      changefreq: 'weekly',
+      priority: '1.0'
+    },
+    ...seoLandingPages.map((page) => ({
+      loc: `${canonicalUrl}${page.slug}`,
+      changefreq: 'weekly',
+      priority: '0.8'
+    }))
+  ];
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${canonicalUrl}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+${urls
+  .map(
+    (url) => `  <url>
+    <loc>${url.loc}</loc>
+    <changefreq>${url.changefreq}</changefreq>
+    <priority>${url.priority}</priority>
     <lastmod>${today}</lastmod>
-  </url>
+  </url>`
+  )
+  .join('\n')}
 </urlset>`;
 
   return new Response(xml, {

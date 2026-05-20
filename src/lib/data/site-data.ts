@@ -39,10 +39,10 @@ export const faqItems = [
 export const businessProfile = {
   name: 'Diablo Auto Detailing',
   shortName: 'Diablo Auto Detailing',
-  tagline: 'Mobile car detailing in Walnut Creek',
+  tagline: 'Mobile car detailing in the East Bay',
   phone: '(510) 631-1230',
   website: 'https://diabloautodetailing.com',
-  serviceArea: 'Walnut Creek, CA',
+  serviceArea: 'Danville and the East Bay, CA',
   neighborhoods: serviceAreas,
   priceRange: '$175-$275',
   openingHours: ['Mo-Sa 08:00-18:30'],
@@ -51,13 +51,13 @@ export const businessProfile = {
   currenciesAccepted: ['USD'],
   address: {
     streetAddress: undefined,
-    addressLocality: 'Walnut Creek',
+    addressLocality: 'Danville',
     addressRegion: 'CA',
-    postalCode: '94598',
+    postalCode: '94526',
     addressCountry: 'US'
   },
   description:
-    'Mobile detailing for interior and exterior car care including hand wash, wheel cleaning, interior vacuuming, glass cleaning, and ceramic wax.'
+    'Mobile detailing for interior and exterior car care across Walnut Creek, Danville, Alamo, and nearby East Bay cities, including hand wash, wheel cleaning, interior vacuuming, glass cleaning, and ceramic wax.'
 };
 
 export const socialLinks = {
